@@ -1,0 +1,29 @@
+Paperdoku
+Copyright (c) 2026 Cho-Hsun Lu (billy1125)
+
+This work is licensed under the Creative Commons Attribution-NonCommercial
+4.0 International License (CC BY-NC 4.0). The full legal text is in the
+LICENSE file. Summary: https://creativecommons.org/licenses/by-nc/4.0/
+
+------------------------------------------------------------------------
+Attribution
+------------------------------------------------------------------------
+
+This suite's design draws on the philosophy of "Academic Research Skills"
+by Cheng-I Wu, which is itself licensed under CC BY-NC 4.0. Credit is given
+as requested by the upstream project:
+
+    Based on Academic Research Skills by Cheng-I Wu
+    https://github.com/Imbad0202/academic-research-skills
+
+------------------------------------------------------------------------
+Third-party dependencies (not included in this repository)
+------------------------------------------------------------------------
+
+- Semantic Scholar MCP server (akapet00/semantic-scholar-mcp), invoked as an
+  external dependency via .mcp.json and run with uvx. It is not part of this
+  repository and remains under its own license.
+  https://github.com/akapet00/semantic-scholar-mcp
+
+- Paper metadata is provided by Semantic Scholar.
+  https://www.semanticscholar.org/
