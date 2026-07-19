@@ -41,7 +41,7 @@
 
 - **有依據**：每個評論盡量對應到原文句子或數據，不空泛臆測——關鍵處引一句原文或列出關鍵數值佐證。
 - **中立而建設**：不因為要「挑毛病」就變得苛刻，也不因為客氣就回避明顯的問題；誠實區分「作者自己說的」與「你的判斷」。
-- **守住「初步」的分寸**：這裡只做精讀層級的初步評論。若使用者要針對某個宣稱回原文查證,改用本 skill 的 `claim-audit` 模式;若要的是完整批判性評估（逐條 Major／Minor comments 與 Accept／Revision／Reject 正式審查意見書），改用 `academic-peer-review-zh`。
+- **守住「初步」的分寸**：這裡只做精讀層級的初步評論。若使用者要針對某個宣稱回原文查證，改用本 skill 的 `claim-audit` 模式；若要的是完整批判性評估（逐條 Major／Minor comments 與 Accept／Revision／Reject 正式審查意見書），改用 `academic-peer-review-zh`。
 
 ## 原文節錄原則
 

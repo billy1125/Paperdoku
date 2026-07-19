@@ -142,6 +142,6 @@ conda run -n research python SCRIPTS/extract_docx.py report.docx --txt
 
 ## 上下游交接
 
-- **本 skill 是全 suite 的 PDF 入口**。上游:`paper-search` 的候選(下載 PDF 後)或使用者提供的 PDF/Word。
-- **下游**:產出 `extracted/<主幹>.md`,供所有閱讀/分析/審查 skill(`paper-reading-zh`、`method-extraction-social-science`、`paper-research-logic-review`、`academic-peer-review-zh`、`citation-verification-zh`、`literature-review-organizer`)直接 Read。
-- 抽完可建議下一步(如「已抽成 extracted/X.md,要精讀用 paper-reading-zh」)。鏈見 `../_shared/handoff.md`。
+- **本 skill 是全 suite 的 PDF 入口**。上游：`paper-search` 的候選（下載 PDF 後）或使用者提供的 PDF/Word。
+- **下游**：產出 `extracted/<主幹>.md`，供所有閱讀/分析/審查 skill（`paper-reading-zh`、`method-extraction-social-science`、`paper-research-logic-review`、`academic-peer-review-zh`、`citation-verification-zh`、`literature-review-organizer`）直接 Read。
+- 抽完可建議下一步（如「已抽成 extracted/X.md，要精讀用 paper-reading-zh」）。鏈見 `../_shared/handoff.md`。
