@@ -1,6 +1,6 @@
 ---
 name: paper-search
-description: 當使用者要搜尋學術論文、做文獻探索、查找特定主題的研究、追蹤論文引用關係，或要求整理某主題的文獻清單時使用。透過 Semantic Scholar MCP 取得論文資料。注意路由：本 skill 只負責搜尋與列清單；要對找到的多篇做深度比較，改用 paper-research-logic-review 或 literature-review-organizer；要精讀單篇改用 paper-reading-zh。
+description： 當使用者要搜尋學術論文、做文獻探索、查找特定主題的研究、追蹤論文引用關係，或要求整理某主題的文獻清單時使用。透過 Semantic Scholar MCP 取得論文資料。注意路由：本 skill 只負責搜尋與列清單；要對找到的多篇做深度比較，改用 paper-research-logic-review 或 literature-review-organizer；要精讀單篇改用 paper-reading-zh。
 version: 0.1.0
 ---
 
@@ -11,9 +11,9 @@ version: 0.1.0
 
 1. 在 Claude Code 輸入 `/mcp`，確認 `semantic-scholar` 顯示 connected
 2. 確認已安裝 uv（終端機輸入 `uv --version` 測試）
-3. 確認 `.mcp.json` 的 `SEMANTIC_SCHOLAR_API_KEY` 已填入有效的 key
+3. 確認 `.claude/settings.local.json` 的 `env.SEMANTIC_SCHOLAR_API_KEY` 已填入有效的 key（可從 `.claude/settings.local.json.example` 複製一份，改名為 `settings.local.json` 後填入；此檔已被 gitignore，不會進版控）。填入或修改後需重啟 Claude Code session 才會生效。
 
-若搜尋很慢或被限速：提醒使用者前往 https://www.semanticscholar.org/product/api 申請免費 API Key 並填入 `.mcp.json`（沒有 key 也能執行，但流量與其他匿名用戶共享，容易被限速）。
+若搜尋很慢或被限速：提醒使用者前往 https://www.semanticscholar.org/product/api 申請免費 API Key 並填入 `.claude/settings.local.json`（沒有 key 也能執行，但流量與其他匿名用戶共享，容易被限速）。
 
 ## 適用情境
 - 「幫我找關於 X 的論文」
@@ -77,6 +77,6 @@ version: 0.1.0
 
 ## 上下游交接
 
-- **本 skill 是發現層入口**(上游:無)。
-- **下游**:找到候選後,若要細讀/分析,PDF 先經 `source-document-extraction` 抽成 `extracted/*.md`;metadata 與 BibTeX(`output/`)可直接餵 `literature-review-organizer` 或 `paper-research-logic-review`。
-- 收尾時建議下一步(如「要細讀第 3 篇,先抽全文再用 paper-reading-zh」)。完整鏈見 `../_shared/handoff.md`。
+- **本 skill 是發現層入口**（上游：無）。
+- **下游**：找到候選後，若要細讀/分析，PDF 先經 `source-document-extraction` 抽成 `extracted/*.md`;metadata 與 BibTeX(`output/`)可直接餵 `literature-review-organizer` 或 `paper-research-logic-review`。
+- 收尾時建議下一步（如「要細讀第 3 篇，先抽全文再用 paper-reading-zh」）。完整鏈見 `../_shared/handoff.md`。

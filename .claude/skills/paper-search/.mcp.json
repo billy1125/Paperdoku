@@ -8,7 +8,7 @@
         "semantic-scholar-mcp"
       ],
       "env": {
-        "SEMANTIC_SCHOLAR_API_KEY": "YOUR_KEY"
+        "SEMANTIC_SCHOLAR_API_KEY": "${SEMANTIC_SCHOLAR_API_KEY:-}"
       }
     }
   }
