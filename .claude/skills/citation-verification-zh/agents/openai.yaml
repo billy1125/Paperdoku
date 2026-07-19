@@ -1,0 +1,5 @@
+interface:
+  display_name: "引用存在性驗證"
+  short_description: "逐條查核參考文獻是否真實存在，揪出可能的幻覺引用"
+  icon: "shield-check"
+  theme_color: "amber"

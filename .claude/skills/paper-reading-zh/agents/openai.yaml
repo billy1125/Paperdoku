@@ -1,0 +1,5 @@
+interface:
+  display_name: "單篇論文閱讀"
+  short_description: "單篇精讀，四模式：快掃／逐章精讀／引導式／宣稱查核"
+  icon: "book-open"
+  theme_color: "indigo"

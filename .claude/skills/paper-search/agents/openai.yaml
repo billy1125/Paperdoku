@@ -1,0 +1,5 @@
+interface:
+  display_name: "論文搜尋"
+  short_description: "透過 Semantic Scholar 搜尋論文、追蹤引用、匯出 BibTeX"
+  icon: "magnifying-glass"
+  theme_color: "cyan"

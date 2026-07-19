@@ -1,0 +1,5 @@
+interface:
+  display_name: "論文研究邏輯審查"
+  short_description: "多篇審查研究框架、假設建構邏輯與支持狀態"
+  icon: "scale"
+  theme_color: "purple"

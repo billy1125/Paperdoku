@@ -1,0 +1,5 @@
+interface:
+  display_name: "文獻整理與綜整"
+  short_description: "多篇比較、研究缺口辨識與未來研究方向"
+  icon: "rectangle-stack"
+  theme_color: "green"

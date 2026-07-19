@@ -1,0 +1,5 @@
+interface:
+  display_name: "文件擷取"
+  short_description: "PDF／Word 擷取為結構化 Markdown，供精讀與檢索"
+  icon: "document-text"
+  theme_color: "slate"

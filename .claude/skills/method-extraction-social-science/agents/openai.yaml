@@ -1,0 +1,5 @@
+interface:
+  display_name: "社科論文方法抽取"
+  short_description: "抽取研究設計、量測與統計分析方法，輸出可比較的結構化整理"
+  icon: "academic-cap"
+  theme_color: "blue"

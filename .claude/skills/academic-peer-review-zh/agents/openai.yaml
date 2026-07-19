@@ -1,0 +1,5 @@
+interface:
+  display_name: "學術論文同儕審查"
+  short_description: "產出繁中審查意見書：逐條 Major／Minor＋Accept／Revision／Reject 判決"
+  icon: "clipboard-document-check"
+  theme_color: "rose"
