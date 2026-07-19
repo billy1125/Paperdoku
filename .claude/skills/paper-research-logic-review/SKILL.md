@@ -1,6 +1,6 @@
 ---
 name: paper-research-logic-review
-description: 分析批量學術研究論文（尤其是PDF格式的文章），審查其研究框架、理論基礎、假設構建邏輯、假設支持情況、討論/結論以及跨論文總結。適用於使用者上傳或引用1-20篇研究論文，並要求跳過引言、方法、抽樣、測量或統計程序細節等不太相關的部分，同時產生一個Markdown表格，每行代表一篇論文，並附上對每篇論文的簡短綜合說明。本 skill 是「評估型」多篇審查（焦點在假設建構邏輯與支持狀態）。注意路由：若要的是綜整、研究缺口、未來研究方向或文獻回顧撰寫（綜整型），改用 literature-review-organizer；若要抽取單篇的研究方法架構，改用 method-extraction-social-science；若只讀單篇並要逐章精讀，改用 paper-reading-zh。
+description： 分析批量學術研究論文（尤其是PDF格式的文章），審查其研究框架、理論基礎、假設構建邏輯、假設支持情況、討論/結論以及跨論文總結。適用於使用者上傳或引用1-20篇研究論文，並要求跳過引言、方法、抽樣、測量或統計程序細節等不太相關的部分，同時產生一個Markdown表格，每行代表一篇論文，並附上對每篇論文的簡短綜合說明。本 skill 是「評估型」多篇審查（焦點在假設建構邏輯與支持狀態）。注意路由：若要的是綜整、研究缺口、未來研究方向或文獻回顧撰寫（綜整型），改用 literature-review-organizer；若要抽取單篇的研究方法架構，改用 method-extraction-social-science；若只讀單篇並要逐章精讀，改用 paper-reading-zh。
 version: 0.1.0
 ---
 
@@ -10,7 +10,7 @@ version: 0.1.0
 
 ## 開場詢問
 
-> 邊界自檢：本 skill 是**評估型**——焦點在假設建構邏輯與支持狀態，刻意跳過方法/抽樣/統計細節。若使用者其實要的是綜整、研究缺口、未來方向或文獻回顧撰寫，改用 `literature-review-organizer`；要抽單篇方法架構改用 `method-extraction-social-science`。不確定時先確認,不硬做。
+> 邊界自檢：本 skill 是**評估型**——焦點在假設建構邏輯與支持狀態，刻意跳過方法/抽樣/統計細節。若使用者其實要的是綜整、研究缺口、未來方向或文獻回顧撰寫，改用 `literature-review-organizer`；要抽單篇方法架構改用 `method-extraction-social-science`。不確定時先確認，不硬做。
 
 收到論文後，先問使用者：
 
@@ -63,5 +63,6 @@ version: 0.1.0
 
 ## 上下游交接
 
-- **上游**:PDF 先經 `source-document-extraction` 抽成 `extracted/*.md` 再讀。
-- **下游**:要綜整/研究缺口/寫回顧改用 `literature-review-organizer`;要逐篇方法架構改用 `method-extraction-social-science`(互補的兩半)。鏈見 `../_shared/handoff.md`。
+- **產物**：論文總結表與綜合說明寫成 markdown 存到 `reports/`（檔名依主題＋`logic-review`，見 `../_shared/paper_naming_convention.md`）。
+- **上游**：PDF 先經 `source-document-extraction` 抽成 `extracted/*.md` 再讀。
+- **下游**：要綜整/研究缺口/寫回顧改用 `literature-review-organizer`；要逐篇方法架構改用 `method-extraction-social-science`（互補的兩半）。鏈見 `../_shared/handoff.md`。

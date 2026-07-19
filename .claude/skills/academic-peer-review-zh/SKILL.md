@@ -1,6 +1,6 @@
 ---
 name: academic-peer-review-zh
-description: 以審查委員角度，為一篇學術論文（期刊／研討會投稿、投稿前自我審查）產出可直接交付、符合期刊慣例的繁體中文審查意見書：逐條 Major／Minor comments（問題→證據→修改方向）＋總體建議（Accept／Minor Revision／Major Revision／Reject）。支援量化（SEM／PLS-SEM／迴歸）、實驗／準實驗、質性、混合方法；可設定審查者風格（嚴格／中立／發展）。當使用者分享一篇論文並要求審查、critique、referee、peer-review、投稿前自我檢查、或「幫我挑毛病」且意圖是批判性評估與修改指引時使用。注意路由：只要逐章精讀或輕量評論改用 paper-reading-zh（full 模式）；只查單一宣稱是否有證據改用 paper-reading-zh 的 claim-audit 模式；一次比較多篇改用 paper-research-logic-review 或 literature-review-organizer；只抽取研究方法改用 method-extraction-social-science。本 skill 是會下判決的完整同儕審查。
+description： 以審查委員角度，為一篇學術論文（期刊／研討會投稿、投稿前自我審查）產出可直接交付、符合期刊慣例的繁體中文審查意見書：逐條 Major／Minor comments（問題→證據→修改方向）＋總體建議（Accept／Minor Revision／Major Revision／Reject）。支援量化（SEM／PLS-SEM／迴歸）、實驗／準實驗、質性、混合方法；可設定審查者風格（嚴格／中立／發展）。當使用者分享一篇論文並要求審查、critique、referee、peer-review、投稿前自我檢查、或「幫我挑毛病」且意圖是批判性評估與修改指引時使用。注意路由：只要逐章精讀或輕量評論改用 paper-reading-zh（full 模式）；只查單一宣稱是否有證據改用 paper-reading-zh 的 claim-audit 模式；一次比較多篇改用 paper-research-logic-review 或 literature-review-organizer；只抽取研究方法改用 method-extraction-social-science。本 skill 是會下判決的完整同儕審查。
 version: 0.1.0
 ---
 
@@ -18,9 +18,9 @@ version: 0.1.0
 
 ## 模式
 
-- **預設:單一審查者**（下方完整流程）——一位可設定風格的審查委員,適合多數情況。
-- **`panel` 多視角面板**（使用者要「多位審查者/不同角度都看看」時）:模擬 N 位獨立審查者 + 主編綜合,減少單一盲點;見 `references/mode-panel.md`。代價是較長、耗 token。
-- **`calibration` 審查者校準**（使用者提供 gold set,想量本審查者偏嚴/偏鬆時）:對已知正解量 FNR/FPR;見 `references/mode-calibration.md`。
+- **預設：單一審查者**（下方完整流程）——一位可設定風格的審查委員，適合多數情況。
+- **`panel` 多視角面板**（使用者要「多位審查者/不同角度都看看」時）：模擬 N 位獨立審查者 + 主編綜合，減少單一盲點；見 `references/mode-panel.md`。代價是較長、耗 token。
+- **`calibration` 審查者校準**（使用者提供 gold set，想量本審查者偏嚴/偏鬆時）：對已知正解量 FNR/FPR；見 `references/mode-calibration.md`。
 
 以下為**預設單一審查者**的完整流程。
 
@@ -78,7 +78,7 @@ version: 0.1.0
    分析方法是否適切、假設是否滿足？統計報告是否完整（量化常缺效果量、信賴區間、適配指標、中介/間接效果；見方法清單）？是否有共線性、抑制、效度等被忽略的徵狀？
 
 6. **結論與宣稱（Interpretation & Claims）**
-   結論是否**被證據支撐**、有無過度宣稱（把相關說成因果、把意圖說成行為、把中等 R² 做強解讀）？反直覺發現是否可能只是統計假象（如共線性抑制造成的負係數）？**強宣稱(尤其因果)是否只靠低等級證據**（如單一橫斷面調查）——可對照 `../_shared/evidence_hierarchy.md`。
+   結論是否**被證據支撐**、有無過度宣稱（把相關說成因果、把意圖說成行為、把中等 R² 做強解讀）？反直覺發現是否可能只是統計假象（如共線性抑制造成的負係數）？**強宣稱（尤其因果）是否只靠低等級證據**（如單一橫斷面調查）——可對照 `../_shared/evidence_hierarchy.md`。
 
 7. **研究限制與倫理（Limitations & Ethics）**
    限制是否誠實且切中要害？是否交代 IRB/倫理審查、知情同意、利益衝突、資料可得性？
@@ -92,7 +92,7 @@ version: 0.1.0
 
 ## 輸出格式（期刊慣用）
 
-預設輸出一份 **Markdown 檔**（除非指定 .docx 等）。結構：
+預設輸出一份 **Markdown 檔**存到 `reports/`（除非指定 .docx 等）。結構：
 
 ```markdown
 # 審查意見書（Reviewer Report）
@@ -176,5 +176,6 @@ version: 0.1.0
 
 ## 上下游交接
 
-- **上游**:PDF 先經 `source-document-extraction` 抽成 `extracted/*.md`(工作流程第 1 步已述);或承接 `paper-reading-zh` 的精讀結果。
-- **下游/搭配**:要查參考文獻真偽用 `citation-verification-zh`(可作為文獻面向的一步)。鏈見 `../_shared/handoff.md`。
+- **產物**：審查意見書寫成 markdown 存到 `reports/`（檔名沿用來源主幹＋`peer-review`，見 `../_shared/paper_naming_convention.md`）。
+- **上游**：PDF 先經 `source-document-extraction` 抽成 `extracted/*.md`（工作流程第 1 步已述）；或承接 `paper-reading-zh` 的精讀結果。
+- **下游/搭配**：要查參考文獻真偽用 `citation-verification-zh`（可作為文獻面向的一步）。鏈見 `../_shared/handoff.md`。

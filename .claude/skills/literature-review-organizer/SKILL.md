@@ -1,6 +1,6 @@
 ---
 name: literature-review-organizer
-description: 整理和分析多篇學術論文，支援上傳的PDF文件或論文連結，比較多篇論文、萃取核心論點、建立文獻比較表、整理理論脈絡、辨識研究缺口、提出未來研究方向，或生成可直接用於文獻回顧與研究提案的繁體中文輸出。本 skill 是「綜整型」多篇整理（焦點在綜整、缺口與寫作）。注意路由：若要逐一評估各篇的假設建構邏輯與支持狀態（評估型，非綜整），改用 paper-research-logic-review；若要抽取單篇的研究方法架構，改用 method-extraction-social-science；若只讀單篇深入理解，改用 paper-reading-zh。
+description： 整理和分析多篇學術論文，支援上傳的PDF文件或論文連結，比較多篇論文、萃取核心論點、建立文獻比較表、整理理論脈絡、辨識研究缺口、提出未來研究方向，或生成可直接用於文獻回顧與研究提案的繁體中文輸出。本 skill 是「綜整型」多篇整理（焦點在綜整、缺口與寫作）。注意路由：若要逐一評估各篇的假設建構邏輯與支持狀態（評估型，非綜整），改用 paper-research-logic-review；若要抽取單篇的研究方法架構，改用 method-extraction-social-science；若只讀單篇深入理解，改用 paper-reading-zh。
 version: 0.1.0
 ---
 
@@ -10,7 +10,7 @@ version: 0.1.0
 
 ## 開場詢問
 
-> 邊界自檢：本 skill 是**綜整型**——焦點在比較、研究缺口、未來方向與文獻回顧撰寫。若使用者其實要的是逐一評估各篇假設建構邏輯與支持狀態（評估型），改用 `paper-research-logic-review`;要抽單篇方法架構改用 `method-extraction-social-science`。不確定時先確認,不硬做。
+> 邊界自檢：本 skill 是**綜整型**——焦點在比較、研究缺口、未來方向與文獻回顧撰寫。若使用者其實要的是逐一評估各篇假設建構邏輯與支持狀態（評估型），改用 `paper-research-logic-review`；要抽單篇方法架構改用 `method-extraction-social-science`。不確定時先確認，不硬做。
 
 收到文獻後，先問使用者：
 
@@ -66,5 +66,6 @@ quick scan 模式只執行步驟 1–3 與步驟 6 的初步版本。
 
 ## 上下游交接
 
-- **上游**:PDF 先經 `source-document-extraction` 抽成 `extracted/*.md`;候選清單可承接 `paper-search`;逐篇方法可承接 `method-extraction-social-science`。
-- **本 skill 常是綜整層終點**。`systematic review` 模式會呼叫 `citation-verification-zh`(查引用)與 `../_shared/risk_of_bias.md`(逐篇 RoB)。鏈見 `../_shared/handoff.md`。
+- **產物**：綜整／比較表／回顧成品寫成 markdown 存到 `reports/`（檔名依主題＋模式，見 `../_shared/paper_naming_convention.md`）。
+- **上游**：PDF 先經 `source-document-extraction` 抽成 `extracted/*.md`；候選清單可承接 `paper-search`；逐篇方法可承接 `method-extraction-social-science`。
+- **本 skill 常是綜整層終點**。`systematic review` 模式會呼叫 `citation-verification-zh`（查引用）與 `../_shared/risk_of_bias.md`（逐篇 RoB）。鏈見 `../_shared/handoff.md`。

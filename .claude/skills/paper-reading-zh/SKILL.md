@@ -1,6 +1,6 @@
 ---
 name: paper-reading-zh
-description: 對「單篇」學術論文的多模式閱讀助手，四種模式：quick-scan（WHY／HOW／WHAT 快掃，判斷是否值得細讀）、full（逐章精讀＋整體分析＋初步評論，預設）、socratic（引導式提問幫你自己讀懂）、claim-audit（針對某個宣稱回原文查證據是否支持）。當使用者上傳或貼上一篇論文（PDF、文字、或網頁連結）：要求「精讀／逐章摘要／這篇在講什麼／目的／研究缺口／結論／節錄原文」用 full；「快速掃一下／值不值得讀／三分鐘看懂」用 quick-scan；「帶我讀／我想自己讀懂／用問題引導我」用 socratic；「這個宣稱有沒有根據／查一下這句／證據夠不夠」用 claim-audit。即使只說「幫我看一下這篇」，只要對象是單篇論文且偏深入理解全文，也用此 skill。注意路由：一次比較多篇改用 paper-research-logic-review（假設邏輯）或 literature-review-organizer（綜整）；只抽研究方法改用 method-extraction-social-science；完整同儕審查（逐條 Major／Minor＋Accept／Reject 審查意見書）改用 academic-peer-review-zh。
+description： 對「單篇」學術論文的多模式閱讀助手，四種模式：quick-scan（WHY／HOW／WHAT 快掃，判斷是否值得細讀）、full（逐章精讀＋整體分析＋初步評論，預設）、socratic（引導式提問幫你自己讀懂）、claim-audit（針對某個宣稱回原文查證據是否支持）。當使用者上傳或貼上一篇論文（PDF、文字、或網頁連結）：要求「精讀／逐章摘要／這篇在講什麼／目的／研究缺口／結論／節錄原文」用 full；「快速掃一下／值不值得讀／三分鐘看懂」用 quick-scan；「帶我讀／我想自己讀懂／用問題引導我」用 socratic；「這個宣稱有沒有根據／查一下這句／證據夠不夠」用 claim-audit。即使只說「幫我看一下這篇」，只要對象是單篇論文且偏深入理解全文，也用此 skill。注意路由：一次比較多篇改用 paper-research-logic-review（假設邏輯）或 literature-review-organizer（綜整）；只抽研究方法改用 method-extraction-social-science；完整同儕審查（逐條 Major／Minor＋Accept／Reject 審查意見書）改用 academic-peer-review-zh。
 version: 0.1.0
 ---
 
@@ -59,5 +59,6 @@ version: 0.1.0
 
 ## 上下游交接
 
-- **上游**:PDF 先經 `source-document-extraction` 抽成 `extracted/*.md` 再讀,不對 PDF 直接動手。
-- **下游**:精讀後要**完整同儕審查**用 `academic-peer-review-zh`;要查**參考文獻真偽**用 `citation-verification-zh`。收尾可主動提示。鏈見 `../_shared/handoff.md`。
+- **產物**：full 模式的精讀報告寫成 markdown 存到 `reports/`（檔名沿用來源主幹＋`reading`，見 `../_shared/paper_naming_convention.md`）；quick-scan／claim-audit 若需留存亦同，socratic 為互動引導通常不留檔。
+- **上游**：PDF 先經 `source-document-extraction` 抽成 `extracted/*.md` 再讀，不對 PDF 直接動手。
+- **下游**：精讀後要**完整同儕審查**用 `academic-peer-review-zh`；要查**參考文獻真偽**用 `citation-verification-zh`。收尾可主動提示。鏈見 `../_shared/handoff.md`。

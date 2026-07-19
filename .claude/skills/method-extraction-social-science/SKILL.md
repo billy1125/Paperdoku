@@ -1,6 +1,6 @@
 ---
 name: method-extraction-social-science
-description: 針對社會科學相關領域的研究文件與檔案，進行實證研究方法提取與結構化分析，了解論文的研究設計、測量、資料收集和統計分析方法，特別適用於調查、實驗、準實驗、或混合方法研究。產生結構化輸出，語言為繁體中文，保留英文方法術語，並提供簡潔的方法解釋和基於證據的品質評估，方便使用者進行比較。本 skill 專攻單篇的「方法架構」。注意路由：若要跨多篇比較假設邏輯與支持狀態，改用 paper-research-logic-review；若要多篇綜整與研究缺口，改用 literature-review-organizer；若要單篇逐章精讀（非只抽方法），改用 paper-reading-zh。
+description： 針對社會科學相關領域的研究文件與檔案，進行實證研究方法提取與結構化分析，了解論文的研究設計、測量、資料收集和統計分析方法，特別適用於調查、實驗、準實驗、或混合方法研究。產生結構化輸出，語言為繁體中文，保留英文方法術語，並提供簡潔的方法解釋和基於證據的品質評估，方便使用者進行比較。本 skill 專攻單篇的「方法架構」。注意路由：若要跨多篇比較假設邏輯與支持狀態，改用 paper-research-logic-review；若要多篇綜整與研究缺口，改用 literature-review-organizer；若要單篇逐章精讀（非只抽方法），改用 paper-reading-zh。
 version: 0.1.0
 ---
 
@@ -81,5 +81,6 @@ version: 0.1.0
 
 ## 上下游交接
 
-- **上游**:PDF 先經 `source-document-extraction` 抽成 `extracted/*.md` 再讀。
-- **下游**:輸出原生 comparison-ready,逐篇抽完可交 `literature-review-organizer` 綜整,或與 `paper-research-logic-review` 的假設邏輯互補。鏈見 `../_shared/handoff.md`。
+- **產物**：方法架構結構化輸出寫成 markdown 存到 `reports/`（檔名沿用來源主幹＋`method`，見 `../_shared/paper_naming_convention.md`）。
+- **上游**：PDF 先經 `source-document-extraction` 抽成 `extracted/*.md` 再讀。
+- **下游**：輸出原生 comparison-ready，逐篇抽完可交 `literature-review-organizer` 綜整，或與 `paper-research-logic-review` 的假設邏輯互補。鏈見 `../_shared/handoff.md`。
