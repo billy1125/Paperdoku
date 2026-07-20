@@ -1,6 +1,6 @@
 ---
 name: literature-review-organizer
-description： 整理和分析多篇學術論文，支援上傳的PDF文件或論文連結，比較多篇論文、萃取核心論點、建立文獻比較表、整理理論脈絡、辨識研究缺口、提出未來研究方向，或生成可直接用於文獻回顧與研究提案的繁體中文輸出。本 skill 是「綜整型」多篇整理（焦點在綜整、缺口與寫作）。注意路由：若要逐一評估各篇的假設建構邏輯與支持狀態（評估型，非綜整），改用 paper-research-logic-review；若要抽取單篇的研究方法架構，改用 method-extraction-social-science；若只讀單篇深入理解，改用 paper-reading-zh。
+description: 整理和分析多篇學術論文，支援上傳的PDF文件或論文連結，比較多篇論文、萃取核心論點、建立文獻比較表、整理理論脈絡、辨識研究缺口、提出未來研究方向，或生成可直接用於文獻回顧與研究提案的繁體中文輸出。本 skill 是「綜整型」多篇整理（焦點在綜整、缺口與寫作）。注意路由：若要逐一評估各篇的假設建構邏輯與支持狀態（評估型，非綜整），改用 paper-research-logic-review；若要抽取單篇的研究方法架構，改用 method-extraction-social-science；若只讀單篇深入理解，改用 paper-reading-zh。
 version: 0.1.0
 ---
 

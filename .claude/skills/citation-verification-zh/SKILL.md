@@ -1,6 +1,6 @@
 ---
 name: citation-verification-zh
-description： 逐條查核一篇論文（或一份參考文獻清單）中的引用是否真的存在，透過 Semantic Scholar 比對，揪出可能的幻覺引用或引錯的文獻，並標記污染風險訊號。輸出每條引用的查核結果表（找到／查無／資訊不足）＋摘要。當使用者要求「查一下這篇的參考文獻是不是真的」「這些引用存在嗎」「幫我驗證 bibliography」「有沒有幻覺引用」「reference check／citation check」，或在審稿／讀 AI 生成文稿時想確認引用真偽時使用。注意：查無不等於一定是假的（可能只是未被索引，如書籍、非英文、極新文獻）——本 skill 給的是 advisory 風險訊號，不是最終判定。路由：要查「某個宣稱是否有原文證據支持」是另一件事，改用 paper-reading-zh 的 claim-audit 模式；要完整審稿改用 academic-peer-review-zh（可把本 skill 當其中一步）。
+description: 逐條查核一篇論文（或一份參考文獻清單）中的引用是否真的存在，透過 Semantic Scholar 比對，揪出可能的幻覺引用或引錯的文獻，並標記污染風險訊號。輸出每條引用的查核結果表（找到／查無／資訊不足）＋摘要。當使用者要求「查一下這篇的參考文獻是不是真的」「這些引用存在嗎」「幫我驗證 bibliography」「有沒有幻覺引用」「reference check／citation check」，或在審稿／讀 AI 生成文稿時想確認引用真偽時使用。注意：查無不等於一定是假的（可能只是未被索引，如書籍、非英文、極新文獻）——本 skill 給的是 advisory 風險訊號，不是最終判定。路由：要查「某個宣稱是否有原文證據支持」是另一件事，改用 paper-reading-zh 的 claim-audit 模式；要完整審稿改用 academic-peer-review-zh（可把本 skill 當其中一步）。
 version: 0.1.0
 ---
 

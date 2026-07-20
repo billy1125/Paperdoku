@@ -1,6 +1,6 @@
 ---
 name: academic-peer-review-zh
-description： 以審查委員角度，為一篇學術論文（期刊／研討會投稿、投稿前自我審查）產出可直接交付、符合期刊慣例的繁體中文審查意見書：逐條 Major／Minor comments（問題→證據→修改方向）＋總體建議（Accept／Minor Revision／Major Revision／Reject）。支援量化（SEM／PLS-SEM／迴歸）、實驗／準實驗、質性、混合方法；可設定審查者風格（嚴格／中立／發展）。當使用者分享一篇論文並要求審查、critique、referee、peer-review、投稿前自我檢查、或「幫我挑毛病」且意圖是批判性評估與修改指引時使用。注意路由：只要逐章精讀或輕量評論改用 paper-reading-zh（full 模式）；只查單一宣稱是否有證據改用 paper-reading-zh 的 claim-audit 模式；一次比較多篇改用 paper-research-logic-review 或 literature-review-organizer；只抽取研究方法改用 method-extraction-social-science。本 skill 是會下判決的完整同儕審查。
+description: 以審查委員角度，為一篇學術論文（期刊／研討會投稿、投稿前自我審查）產出可直接交付、符合期刊慣例的繁體中文審查意見書：逐條 Major／Minor comments（問題→證據→修改方向）＋總體建議（Accept／Minor Revision／Major Revision／Reject）。支援量化（SEM／PLS-SEM／迴歸）、實驗／準實驗、質性、混合方法；可設定審查者風格（嚴格／中立／發展）。當使用者分享一篇論文並要求審查、critique、referee、peer-review、投稿前自我檢查、或「幫我挑毛病」且意圖是批判性評估與修改指引時使用。注意路由：只要逐章精讀或輕量評論改用 paper-reading-zh（full 模式）；只查單一宣稱是否有證據改用 paper-reading-zh 的 claim-audit 模式；一次比較多篇改用 paper-research-logic-review 或 literature-review-organizer；只抽取研究方法改用 method-extraction-social-science。本 skill 是會下判決的完整同儕審查。
 version: 0.1.0
 ---
 

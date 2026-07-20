@@ -1,6 +1,6 @@
 ---
 name: paper-search
-description： 當使用者要搜尋學術論文、做文獻探索、查找特定主題的研究、追蹤論文引用關係，或要求整理某主題的文獻清單時使用。透過 Semantic Scholar MCP 取得論文資料。注意路由：本 skill 只負責搜尋與列清單；要對找到的多篇做深度比較，改用 paper-research-logic-review 或 literature-review-organizer；要精讀單篇改用 paper-reading-zh。
+description: 當使用者要搜尋學術論文、做文獻探索、查找特定主題的研究、追蹤論文引用關係，或要求整理某主題的文獻清單時使用。透過 Semantic Scholar MCP 取得論文資料。注意路由：本 skill 只負責搜尋與列清單；要對找到的多篇做深度比較，改用 paper-research-logic-review 或 literature-review-organizer；要精讀單篇改用 paper-reading-zh。
 version: 0.1.0
 ---
 
