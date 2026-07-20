@@ -68,40 +68,13 @@ Suite 版本：0.1.0
 
 `_shared/` 無 SKILL.md，不會被當成 skill 載入。
 
-## 執行環境與指令（僅 source-document-extraction 需要）
+## 環境與 MCP（安裝/測試細節見 docs）
 
-除 `source-document-extraction` 內含確定性 Python 腳本外，全 suite 皆 prompt 驅動、無 build/lint/test 工具鏈。安裝步驟見 [`docs/install.md`](docs/install.md)；本段聚焦環境慣例與常用指令。
+除 `source-document-extraction` 內含確定性 Python 腳本外，全 suite 皆 prompt 驅動、無 build/lint/test 工具鏈。以下是**每次運作都該知道**的守則；安裝、測試、常用指令等細節在 docs 與各 skill 的 `SKILL.md`，平時不必載入。
 
-- 該 skill 的 Python 腳本一律在 conda 環境 `research`(Python 3.11)執行。
-- **不直接呼叫裸 `python`/`pip`**（已於 `.claude/settings.json` 封鎖：`deny` 裸 `python`/`pip`，只 `allow` `conda run -n research ...`）；詳細選項見該 skill 的 `SKILL.md` / `CLAUDE.md`。
-
-```bash
-# 安裝(環境不存在時)
-conda create -n research python=3.11 -y
-conda run -n research pip install pymupdf pdfplumber pymupdf4llm python-docx mammoth
-
-# 跑測試(不依賴 pytest;全過印 ALL PASS、以 0 退出。需 repo 根目錄的 PDF fixture)
-conda run -n research python .claude/skills/source-document-extraction/tests/test_extract_pdf.py
-
-# 最常用:PDF → Markdown(預設 pymupdf4llm 後端;省略 -o 時輸出落在 extracted/)
-conda run -n research python .claude/skills/source-document-extraction/scripts/extract_pdf.py X.pdf
-```
-
-## MCP 設定（paper-search 與 citation-verification-zh 共用）
-
-MCP 採**專案層級安裝**：設定在專案根目錄 `.mcp.json`，從 repo 根目錄啟動 `claude` 時自動載入（首次會提示信任專案 MCP，選允許）。`paper-search` 與 `citation-verification-zh` 共用這份設定，內含**兩個可用資料源 MCP server**（可擇一或併用）：
-
-- `semantic-scholar`（`uvx` 執行）——2 億篇以上論文，需前置 `uv`／`uvx` 與 `git`。
-- `openalex`（`npx` 執行）——2.4 億篇以上，另含引用網路、期刊分級等，需前置 Node.js。
-
-金鑰／email 放在 gitignore 過的 `.claude/settings.local.json`（`.mcp.json` 以 `${VAR:-}` 引用，不進版控）；填改後需**重啟 session** 生效。皆無金鑰亦可跑（匿名速率）。MCP 未連線時，`citation-verification-zh` 誠實回報無法查核、**不憑記憶判定**（呼應 anti-leakage）。
-
-**兩份詳細文件，平時不必載入，僅在下列時機才去讀**（避免本檔肥大）：
-
-- 安裝與前置：[`docs/install.md`](docs/install.md)（安裝指令與說明）。
-- 連線測試：[`docs/test.md`](docs/test.md) ＋ `tests/test_mcp_servers.py`（測試指令與說明）。
-
-**觸發時機**：使用者**第一次使用** `paper-search`／`citation-verification-zh`，或明確要**重新安裝／重新測試**時——才讀取上述文件，並可**主動協助安裝與執行測試**（`conda run -n research python tests/test_mcp_servers.py`，全過印 `ALL PASS`）。其餘情況不需載入這兩份。
+- `source-document-extraction` 一律走 `conda run -n research`（裸 `python`/`pip` 已於 `.claude/settings.json` 封鎖：`deny` 裸 `python`/`pip`，只 `allow` `conda run -n research ...`）。
+- MCP 採**專案層級**：專案根目錄 `.mcp.json`，兩個可用資料源 `semantic-scholar`（`uvx`）與 `openalex`（`npx`），可擇一或併用；金鑰／email 放在 gitignore 過的 `.claude/settings.local.json`（`.mcp.json` 以 `${VAR:-}` 引用，不進版控），填改後需**重啟 session** 生效。MCP 未連線時 `citation-verification-zh` 誠實回報無法查核、**不憑記憶判定**（anti-leakage）。
+- **僅在第一次使用 `source-document-extraction`／`paper-search`／`citation-verification-zh`，或需重新安裝／測試時才讀**：[`docs/install.md`](docs/install.md)（安裝指令與說明）、[`docs/test.md`](docs/test.md) ＋ `tests/test_mcp_servers.py`（測試指令與說明），並可**主動協助安裝與執行測試**（`conda run -n research python tests/test_mcp_servers.py`，全過印 `ALL PASS`）。其餘情況不需載入這些。
 
 ## 已知邊界（本版）
 

@@ -105,11 +105,17 @@ conda run -n research pip install pymupdf pdfplumber pymupdf4llm python-docx mam
 conda run -n research python -c "import fitz, pdfplumber, pymupdf4llm"
 ```
 
+以實際 PDF fixture 自測（不依賴 pytest；全過印 `ALL PASS`、以 0 退出；fixture 見該 skill）：
+
+```bash
+conda run -n research python .claude/skills/source-document-extraction/tests/test_extract_pdf.py
+```
+
 裸 `python`/`pip` 已於 `.claude/settings.json` 封鎖；一律走 `conda run -n research`。詳細選項見該 skill 的 [`SKILL.md`](../.claude/skills/source-document-extraction/SKILL.md) 與 [`CLAUDE.md`](../.claude/skills/source-document-extraction/CLAUDE.md)。
 
 ## 4. 驗證兩個資料源 MCP
 
-裝好後可跑連線測試確認 `semantic-scholar` 與 `openalex` 皆可實際查詢：
+裝好後可跑連線測試確認 `semantic-scholar` 與 `openalex` 皆可實際查詢——**自己在終端機執行**，或直接**請 Claude 代為執行**：
 
 ```bash
 conda run -n research python tests/test_mcp_servers.py

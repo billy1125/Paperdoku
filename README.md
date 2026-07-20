@@ -57,11 +57,46 @@ Suite 版本：0.1.0
 
 ## 前置需求
 
-完整安裝步驟見 [`docs/install.md`](docs/install.md)。外部相依只集中在兩個 skill；其餘 5 個閱讀/分析 skill 為 prompt 驅動，**不需任何外部安裝**。
+外部相依只集中在兩個 skill；其餘 5 個閱讀/分析 skill 為 prompt 驅動，**不需任何外部安裝**。以下為快速安裝指引，完整說明、驗證與疑難排解見 [`docs/install.md`](docs/install.md)。
 
-- **Claude Code**（最新版）——執行整個 suite 的平台。
-- **paper-search 與 citation-verification-zh**：有兩個可用資料源 MCP，可擇一或併用——**Semantic Scholar**（需 `uv`／`uvx` + `git`）與 **OpenAlex**（需 Node.js，`npx` 啟動）。金鑰／email 皆選用（免費）。
-- **source-document-extraction**：需 conda 環境 `research`(Python 3.11)與 `pymupdf`／`pdfplumber`／`pymupdf4llm`／`python-docx`／`mammoth`；裸 `python`/`pip` 已封鎖，一律走 `conda run -n research`。
+**1. Claude Code（最新版，全部 skill 的平台）**
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+**2. paper-search 與 citation-verification-zh（兩個資料源 MCP，可擇一或併用）**
+
+- **Semantic Scholar**：需 `uv`（提供 `uvx`）與 `git`。`git` 請依作業系統另裝，`uv` 安裝：
+
+  ```bash
+  # macOS / Linux
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  # Windows (PowerShell)
+  powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+  ```
+
+- **OpenAlex**：需 Node.js（`npx` 隨附，裝 Claude Code 時已含），無須另裝。
+- **金鑰／email**（皆選用、免費）：填入 `.claude/settings.local.json`（從 `.claude/settings.local.json.example` 複製；已 gitignore）。MCP 設定在**專案根目錄 `.mcp.json`**，從根目錄啟動 `claude` 會自動載入，用 `/mcp` 確認 `semantic-scholar`／`openalex` 已連線。
+
+**3. source-document-extraction（PDF/Word → 結構化 Markdown）**
+
+```bash
+conda create -n research python=3.11 -y
+conda run -n research pip install pymupdf pdfplumber pymupdf4llm python-docx mammoth
+```
+
+裸 `python`/`pip` 已於 `.claude/settings.json` 封鎖；一律走 `conda run -n research`。
+
+**4. 驗證兩個資料源 MCP**
+
+裝好後可跑連線測試確認 `semantic-scholar` 與 `openalex` 可實際查詢——**自己在終端機執行**，或直接**請 Claude 代為執行**（開著 Claude Code 時說「幫我跑 MCP 連線測試」即可）：
+
+```bash
+conda run -n research python tests/test_mcp_servers.py
+```
+
+全部通過會印 `ALL PASS`。測試內容與疑難排解見 [`docs/test.md`](docs/test.md)。
 
 ## 設計要點
 

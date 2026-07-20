@@ -4,6 +4,8 @@
 
 ## 執行指令
 
+可**自己在終端機執行**，或直接**請 Claude 代為執行**（開著 Claude Code 時說「幫我跑 MCP 連線測試」即可）：
+
 ```bash
 conda run -n research python tests/test_mcp_servers.py
 ```
