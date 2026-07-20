@@ -13,7 +13,7 @@ conda run -n research python tests/test_mcp_servers.py
 
 ## 測試內容
 
-腳本讀取 `.claude/skills/paper-search/.mcp.json`，**照設定原樣啟動每個 server**，各跑三項檢查：
+腳本讀取專案根目錄 `.mcp.json`，**照設定原樣啟動每個 server**，各跑三項檢查：
 
 | # | 檢查 | 意義 |
 |---|---|---|
@@ -29,7 +29,7 @@ conda run -n research python tests/test_mcp_servers.py
 
 ```text
 Paperdoku MCP connectivity test
-config: .../.claude/skills/paper-search/.mcp.json
+config: .../Paperdoku/.mcp.json
 ------------------------------------------------------------
 == semantic-scholar == (credentials set: SEMANTIC_SCHOLAR_API_KEY)
 [PASS] semantic-scholar: initialize -> serverInfo 'semantic-scholar'
@@ -48,4 +48,4 @@ ALL PASS
 
 - **`[FAIL] … no initialize/serverInfo response`**：前置工具缺失。`semantic-scholar` 需 `uv`／`uvx` 與 `git`；`openalex` 需 Node.js（`npx`）。見 [`install.md`](install.md)。首次執行 `uvx`／`npx` 會下載套件，較慢屬正常，腳本已放寬逾時。
 - **`tools/call` 失敗但前兩項通過**：多半是網路或速率限制。OpenAlex 建議填 `OPENALEX_EMAIL`（polite pool）；Semantic Scholar 填 `SEMANTIC_SCHOLAR_API_KEY` 可提速。
-- **`not found in .mcp.json`**：對應 server 未設定；檢查 `.claude/skills/paper-search/.mcp.json` 的 `mcpServers`。
+- **`not found in .mcp.json`**：對應 server 未設定；檢查專案根目錄 `.mcp.json` 的 `mcpServers`。

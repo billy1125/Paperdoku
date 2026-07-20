@@ -14,7 +14,7 @@ version: 0.1.0
 
 ## 前置需求（查核用 MCP）
 
-本 skill 依賴查核用的 MCP server（與 `paper-search` skill 共用，設定見 `paper-search/.mcp.json`）。有**兩個可用資料源**，可擇一或併用互補：
+本 skill 依賴查核用的 MCP server（與 `paper-search` skill 共用，設定見專案根目錄 `.mcp.json`，專案層級安裝）。有**兩個可用資料源**，可擇一或併用互補：
 
 - `semantic-scholar`（`uvx` 執行）：以標題／作者比對逐條查核。
 - `openalex`（`npx` 執行）：另提供 `batch_resolve_references`，可**一次批次解析整份參考清單**，特別適合本 skill；命中率與涵蓋範圍與 Semantic Scholar 互補（兩邊都查無時，是更強的風險訊號）。

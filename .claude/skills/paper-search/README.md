@@ -5,15 +5,21 @@
 搜尋 2 億篇以上學術論文，自動整理成表格 + 摘要，可匯出 APA / BibTeX。
 
 技能的行為規則（工作流程、輸出格式、注意事項）定義在 `SKILL.md`；
-本檔僅說明安裝與啟動方式。
+本檔僅說明安裝與啟動方式，完整前置需求另見專案 `docs/install.md`。
+
+> MCP 採**專案層級安裝**：設定放在**專案根目錄的 `.mcp.json`**（不在本資料夾），
+> 內含 `semantic-scholar` 與 `openalex` 兩個資料源；金鑰／email 放在
+> `.claude/settings.local.json`。從專案根目錄啟動 `claude` 即自動載入。
 
 ## 檔案結構
 ```
-paper-search/
-├── SKILL.md      # 論文搜尋技能定義（agent 自動讀取）
-├── .mcp.json     # MCP 設定（需填入 API key）
-├── README.md     # 本檔：安裝與使用說明
-└── output/       # 搜尋結果輸出資料夾（執行時自動建立）
+Paperdoku/
+├── .mcp.json                       # MCP 設定（專案層級，${VAR:-} 引用金鑰）
+├── .claude/settings.local.json     # 金鑰／email（gitignore，不進版控）
+└── .claude/skills/paper-search/
+    ├── SKILL.md                    # 論文搜尋技能定義（agent 自動讀取）
+    ├── README.md                   # 本檔：安裝與使用說明
+    └── output/                     # 搜尋結果輸出資料夾（執行時自動建立）
 ```
 
 ## 安裝步驟
@@ -35,21 +41,28 @@ powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 
 ### 3. 申請 Semantic Scholar API Key（建議，免費）
 前往 https://www.semanticscholar.org/product/api 申請，
-然後打開 `.mcp.json`，把 `YOUR_KEY` 換成你的 key。
+把 key 填入 `.claude/settings.local.json` 的 `env.SEMANTIC_SCHOLAR_API_KEY`
+（從 `.claude/settings.local.json.example` 複製一份改名；此檔已被 gitignore）。
+根目錄 `.mcp.json` 以 `${SEMANTIC_SCHOLAR_API_KEY:-}` 引用，金鑰不進版控。
 （沒 key 也能跑，但流量與其他匿名用戶共享，較容易被限速）
 
+若要一併使用 OpenAlex 資料源，改填 `OPENALEX_EMAIL`（建議）與選用的
+`OPENALEX_API_KEY`；細節見 `docs/install.md`。
+
 ### 4. 啟動
+從**專案根目錄**啟動（專案層級 `.mcp.json` 才會被載入）：
 ```bash
-cd paper-search
+cd Paperdoku
 claude
 ```
+首次啟動會提示是否信任專案 MCP，選允許。填改金鑰後需重啟 session 生效。
 
 ### 5. 確認 MCP 連線
 在 Claude Code 裡輸入：
 ```
 /mcp
 ```
-看到 semantic-scholar 顯示 connected 就成功了。
+看到 `semantic-scholar`（及 `openalex`，若已設定）顯示 connected 就成功了。
 
 ## 使用範例
 ```

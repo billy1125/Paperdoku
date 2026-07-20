@@ -89,7 +89,7 @@ conda run -n research python .claude/skills/source-document-extraction/scripts/e
 
 ## MCP 設定（paper-search 與 citation-verification-zh 共用）
 
-`paper-search` 與 `citation-verification-zh` 共用 `paper-search/.mcp.json`，內含**兩個可用資料源 MCP server**（可擇一或併用）：
+MCP 採**專案層級安裝**：設定在專案根目錄 `.mcp.json`，從 repo 根目錄啟動 `claude` 時自動載入（首次會提示信任專案 MCP，選允許）。`paper-search` 與 `citation-verification-zh` 共用這份設定，內含**兩個可用資料源 MCP server**（可擇一或併用）：
 
 - `semantic-scholar`（`uvx` 執行）——2 億篇以上論文，需前置 `uv`／`uvx` 與 `git`。
 - `openalex`（`npx` 執行）——2.4 億篇以上，另含引用網路、期刊分級等，需前置 Node.js。

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Connectivity test for the paper-search MCP servers (semantic-scholar, openalex).
 
-For each server configured in `.claude/skills/paper-search/.mcp.json`, this launches
+For each server configured in the project-root `.mcp.json`, this launches
 the server exactly as configured, performs a JSON-RPC handshake over stdio, then
 asserts three things:
 
@@ -31,7 +31,7 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MCP_JSON = ROOT / ".claude" / "skills" / "paper-search" / ".mcp.json"
+MCP_JSON = ROOT / ".mcp.json"
 SETTINGS = ROOT / ".claude" / "settings.local.json"
 
 # Per-server checks. Tool names verified against each server's live tools/list.

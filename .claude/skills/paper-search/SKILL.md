@@ -7,7 +7,7 @@ version: 0.1.0
 # 論文搜尋技能
 
 ## 前置需求與環境檢查
-本技能有**兩個可用的資料源 MCP server**（皆設定於本資料夾 `.mcp.json`），可擇一或併用：
+本技能有**兩個可用的資料源 MCP server**（專案層級安裝，設定於專案根目錄 `.mcp.json`），可擇一或併用：
 
 - `semantic-scholar`（以 `uvx` 執行 semantic-scholar-mcp）——涵蓋 2 億篇以上論文。
 - `openalex`（以 `npx` 執行 openalex-research-mcp）——涵蓋 2.4 億篇以上論文，另含引用網路、期刊分級、開放取用版本等分析工具。

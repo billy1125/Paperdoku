@@ -26,7 +26,9 @@ npm install -g @anthropic-ai/claude-code
 
 ## 2. Semantic Scholar MCP（paper-search 與 citation-verification-zh）
 
-兩個 skill 共用 `semantic-scholar` MCP server，設定於 `.claude/skills/paper-search/.mcp.json`，由 `uvx` 執行、套件來源為 `git+https://github.com/akapet00/semantic-scholar-mcp`。因此需先安裝 **`uv`（提供 `uvx`）** 與 **`git`**（clone 取件用）；**兩者缺一 MCP 無法啟動，這兩個 skill 就不能動作**。
+兩個資料源 MCP 採**專案層級安裝**：設定寫在**專案根目錄的 `.mcp.json`**，從 repo 根目錄啟動 `claude` 時自動載入（首次會提示是否信任專案 MCP，選允許即可）。此檔以 `${VAR:-}` 引用金鑰、不含明文，隨整包專案一起版控／搬移。裝好後在 Claude Code 輸入 `/mcp` 應看到兩個 server connected。
+
+其一 `semantic-scholar` MCP server 由 `uvx` 執行、套件來源為 `git+https://github.com/akapet00/semantic-scholar-mcp`。因此需先安裝 **`uv`（提供 `uvx`）** 與 **`git`**（clone 取件用）；**兩者缺一 MCP 無法啟動，這兩個 skill 就不能動作**。
 
 ### 2.1 安裝 uv
 
