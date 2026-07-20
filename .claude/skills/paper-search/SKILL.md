@@ -1,6 +1,6 @@
 ---
 name: paper-search
-description: 當使用者要搜尋學術論文、做文獻探索、查找特定主題的研究、追蹤論文引用關係，或要求整理某主題的文獻清單時使用。透過 Semantic Scholar MCP 取得論文資料。注意路由：本 skill 只負責搜尋與列清單；要對找到的多篇做深度比較，改用 paper-research-logic-review 或 literature-review-organizer；要精讀單篇改用 paper-reading-zh。
+description: 當使用者要搜尋學術論文、做文獻探索、查找特定主題的研究、追蹤論文引用關係，或要求整理某主題的文獻清單時使用。透過論文資料庫 MCP 取得資料——目前有 Semantic Scholar 與 OpenAlex 兩條可用管道，可擇一或併用。注意路由：本 skill 只負責搜尋與列清單；要對找到的多篇做深度比較，改用 paper-research-logic-review 或 literature-review-organizer；要精讀單篇改用 paper-reading-zh。
 version: 0.1.0
 ---
 
@@ -81,7 +81,8 @@ version: 0.1.0
 
 ## 找不到論文時
 - 換英文同義詞或更精確的詞組重搜，並向使用者說明調整了哪些搜尋詞
-- Semantic Scholar 資料有覆蓋限制，仍找不到時誠實告知，可建議補用一般 web search 查實務資料
+- 若目前用的資料源查無，改用另一條管道再查一次（兩源涵蓋範圍互補）
+- 兩個資料源都有覆蓋限制，仍找不到時誠實告知，可建議補用一般 web search 查實務資料
 
 ## 注意事項
 - 所有論文資訊一律來自 MCP 實際回傳，絕不憑記憶捏造標題、作者或引用數

@@ -1,8 +1,13 @@
-# paper-search — Semantic Scholar 論文搜尋技能：安裝與使用說明
+# paper-search — 論文搜尋技能：安裝與使用說明
 
 ## 這是什麼
-一個跑在 Claude Code 裡的論文搜尋技能，透過 Semantic Scholar MCP
-搜尋 2 億篇以上學術論文，自動整理成表格 + 摘要，可匯出 APA / BibTeX。
+一個跑在 Claude Code 裡的**論文搜尋技能**：依關鍵字搜尋學術論文、追蹤引用關係，
+自動整理成表格 + 摘要，可匯出 APA / BibTeX。
+
+論文資料透過 MCP 取得。**目前有兩條可用管道，可擇一或併用**：
+
+- **Semantic Scholar**——2 億篇以上論文。
+- **OpenAlex**——2.4 億篇以上，另含引用網路、期刊分級、開放取用版本等分析工具。
 
 技能的行為規則（工作流程、輸出格式、注意事項）定義在 `SKILL.md`；
 本檔僅說明安裝與啟動方式，完整前置需求另見專案 `docs/install.md`。
@@ -29,25 +34,23 @@ Paperdoku/
 npm install -g @anthropic-ai/claude-code
 ```
 
-### 2. 安裝 uv（執行 MCP server 用）
-macOS / Linux:
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-Windows (PowerShell):
-```powershell
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
+### 2. 安裝兩條管道的執行環境（可擇一或併用）
 
-### 3. 申請 Semantic Scholar API Key（建議，免費）
-前往 https://www.semanticscholar.org/product/api 申請，
-把 key 填入 `.claude/settings.local.json` 的 `env.SEMANTIC_SCHOLAR_API_KEY`
-（從 `.claude/settings.local.json.example` 複製一份改名；此檔已被 gitignore）。
-根目錄 `.mcp.json` 以 `${SEMANTIC_SCHOLAR_API_KEY:-}` 引用，金鑰不進版控。
-（沒 key 也能跑，但流量與其他匿名用戶共享，較容易被限速）
+- **Semantic Scholar**：需 `uv`（提供 `uvx`）與 `git`（`git` 請依作業系統另裝）。安裝 uv：
+  ```bash
+  # macOS / Linux
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  # Windows (PowerShell)
+  powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+  ```
+- **OpenAlex**：需 Node.js（步驟 1 已裝，`npx` 隨附），無須另裝。
 
-若要一併使用 OpenAlex 資料源，改填 `OPENALEX_EMAIL`（建議）與選用的
-`OPENALEX_API_KEY`；細節見 `docs/install.md`。
+### 3. 設定金鑰／email（皆選用、免費）
+都填在 `.claude/settings.local.json`（從 `.claude/settings.local.json.example` 複製改名；已 gitignore）。
+根目錄 `.mcp.json` 以 `${VAR:-}` 引用，皆不進版控。兩者都沒填也能跑，只是與匿名用戶共用速率、較易被限速。
+
+- **Semantic Scholar**：`SEMANTIC_SCHOLAR_API_KEY`，申請 https://www.semanticscholar.org/product/api
+- **OpenAlex**：`OPENALEX_EMAIL`（建議，polite pool 把速率上限由 10 提到 100 req/s）與選用的 `OPENALEX_API_KEY`（premium）
 
 ### 4. 啟動
 從**專案根目錄**啟動（專案層級 `.mcp.json` 才會被載入）：
@@ -74,6 +77,6 @@ claude
 ```
 
 ## 疑難排解
-- MCP 連不上 → 確認 uv 已安裝（終端機輸入 `uv --version` 測試）
-- 搜尋很慢或被限速 → 確認已填入 API key
-- 找不到論文 → 試試換英文關鍵字，或請 agent 調整搜尋詞
+- MCP 連不上 → 確認該管道前置已裝（Semantic Scholar 需 `uv`／`git`；OpenAlex 需 Node.js），已從專案根目錄啟動並重啟過 session
+- 搜尋很慢或被限速 → 確認已填 API key／email
+- 找不到論文 → 換英文關鍵字，或改用另一個資料源再查一次
