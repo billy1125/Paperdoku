@@ -7,13 +7,18 @@ version: 0.1.0
 # 論文搜尋技能
 
 ## 前置需求與環境檢查
-本技能依賴 `semantic-scholar` MCP server（設定於本資料夾 `.mcp.json`，以 `uvx` 執行 semantic-scholar-mcp）。執行搜尋前若發現 MCP 工具不可用，**不要憑記憶回答論文資訊**，改為引導使用者依序排查：
+本技能有**兩個可用的資料源 MCP server**（皆設定於本資料夾 `.mcp.json`），可擇一或併用：
 
-1. 在 Claude Code 輸入 `/mcp`，確認 `semantic-scholar` 顯示 connected
-2. 確認已安裝 uv（終端機輸入 `uv --version` 測試）
-3. 確認 `.claude/settings.local.json` 的 `env.SEMANTIC_SCHOLAR_API_KEY` 已填入有效的 key（可從 `.claude/settings.local.json.example` 複製一份，改名為 `settings.local.json` 後填入；此檔已被 gitignore，不會進版控）。填入或修改後需重啟 Claude Code session 才會生效。
+- `semantic-scholar`（以 `uvx` 執行 semantic-scholar-mcp）——涵蓋 2 億篇以上論文。
+- `openalex`（以 `npx` 執行 openalex-research-mcp）——涵蓋 2.4 億篇以上論文，另含引用網路、期刊分級、開放取用版本等分析工具。
 
-若搜尋很慢或被限速：提醒使用者前往 https://www.semanticscholar.org/product/api 申請免費 API Key 並填入 `.claude/settings.local.json`（沒有 key 也能執行，但流量與其他匿名用戶共享，容易被限速）。
+執行搜尋前若發現 MCP 工具不可用，**不要憑記憶回答論文資訊**，改為引導使用者依序排查：
+
+1. 在 Claude Code 輸入 `/mcp`，確認要用的 server（`semantic-scholar` 或 `openalex`）顯示 connected
+2. 確認前置工具已安裝：`semantic-scholar` 需 `uv`（`uv --version`）與 `git`；`openalex` 需 Node.js（`node --version`，`npx` 隨附）
+3. 確認 `.claude/settings.local.json` 的金鑰／email 已填妥（可從 `.claude/settings.local.json.example` 複製；此檔已被 gitignore，不進版控）：Semantic Scholar 用 `SEMANTIC_SCHOLAR_API_KEY`；OpenAlex 用 `OPENALEX_EMAIL`（polite pool，把速率上限由 10 提到 100 req/s）與選用的 `OPENALEX_API_KEY`（premium）。填入或修改後需重啟 Claude Code session 才會生效。
+
+兩者皆無金鑰亦可執行（共用匿名速率、較易被限速）。安裝細節見專案 `docs/install.md`。
 
 ## 適用情境
 - 「幫我找關於 X 的論文」
@@ -33,11 +38,18 @@ version: 0.1.0
 資訊不足時一次性詢問，不要逐題問。
 
 ### 步驟 2：執行搜尋
-使用 Semantic Scholar MCP 工具：
+依現有連線的 server 選工具（一組關鍵字結果不理想時，換同義詞或更精確的詞組再搜，例如把 "AI writing" 換成 "generative AI academic writing"）：
+
+**Semantic Scholar MCP：**
 - `search_papers` 或 `paper_relevance_search`：關鍵字搜尋，帶入 year、fields_of_study、min_citation_count 等 filter
-- 一組關鍵字結果不理想時，換同義詞或更精確的詞組再搜（例如把 "AI writing" 換成 "generative AI academic writing"）
-- 需要時用 `get_paper` 取得單篇完整資訊（abstract、DOI、引用數）
-- 需要追蹤引用時用 `get_citations`（誰引用此文 / 此文引用誰）
+- `get_paper`：取得單篇完整資訊（abstract、DOI、引用數）
+- `get_citations`：追蹤引用（誰引用此文 / 此文引用誰）
+
+**OpenAlex MCP（工具名以實測 `tools/list` 為準）：**
+- `search_works`：關鍵字搜尋；`search_by_topic` 依主題探索；`autocomplete_search` 補全查詢詞
+- `get_work`：取單篇 metadata；`get_related_works` 取相關文獻；`find_open_access_version` 找開放取用版本
+- `get_work_citations` / `get_work_references` / `get_citation_network`：正向被引、反向引用、引用網路；`get_top_cited_works` 取高被引
+- `find_review_articles` 找回顧文章、`find_seminal_papers` 找奠基之作；`check_venue_quality` / `list_journal_presets`（UTD24、FT50、AJG 等分級）做期刊品質篩選
 
 ### 步驟 3：篩選
 從原始結果中挑出真正相關的，過濾掉：

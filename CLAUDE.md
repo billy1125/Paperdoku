@@ -70,7 +70,7 @@ Suite 版本：0.1.0
 
 ## 執行環境與指令（僅 source-document-extraction 需要）
 
-除 `source-document-extraction` 內含確定性 Python 腳本外，全 suite 皆 prompt 驅動、無 build/lint/test 工具鏈。
+除 `source-document-extraction` 內含確定性 Python 腳本外，全 suite 皆 prompt 驅動、無 build/lint/test 工具鏈。安裝步驟見 [`docs/install.md`](docs/install.md)；本段聚焦環境慣例與常用指令。
 
 - 該 skill 的 Python 腳本一律在 conda 環境 `research`(Python 3.11)執行。
 - **不直接呼叫裸 `python`/`pip`**（已於 `.claude/settings.json` 封鎖：`deny` 裸 `python`/`pip`，只 `allow` `conda run -n research ...`）；詳細選項見該 skill 的 `SKILL.md` / `CLAUDE.md`。
@@ -89,11 +89,19 @@ conda run -n research python .claude/skills/source-document-extraction/scripts/e
 
 ## MCP 設定（paper-search 與 citation-verification-zh 共用）
 
-兩個 skill 共用 `semantic-scholar` MCP server（`paper-search/.mcp.json`，以 `uvx` 執行 `semantic-scholar-mcp`）。
+`paper-search` 與 `citation-verification-zh` 共用 `paper-search/.mcp.json`，內含**兩個可用資料源 MCP server**（可擇一或併用）：
 
-- API 金鑰放在 **`.claude/settings.local.json`** 的 `env.SEMANTIC_SCHOLAR_API_KEY`（從 `.claude/settings.local.json.example` 複製後填入）。此檔已被 gitignore,`.mcp.json` 僅以 `${SEMANTIC_SCHOLAR_API_KEY:-}` 引用，金鑰不進版控。
-- 填入或修改金鑰後需**重啟 Claude Code session** 才生效；無金鑰仍可跑，但與匿名用戶共用速率限制。
-- MCP 未連線時，`citation-verification-zh` 會誠實回報無法查核，**不憑記憶判定**（呼應 anti-leakage）。
+- `semantic-scholar`（`uvx` 執行）——2 億篇以上論文，需前置 `uv`／`uvx` 與 `git`。
+- `openalex`（`npx` 執行）——2.4 億篇以上，另含引用網路、期刊分級等，需前置 Node.js。
+
+金鑰／email 放在 gitignore 過的 `.claude/settings.local.json`（`.mcp.json` 以 `${VAR:-}` 引用，不進版控）；填改後需**重啟 session** 生效。皆無金鑰亦可跑（匿名速率）。MCP 未連線時，`citation-verification-zh` 誠實回報無法查核、**不憑記憶判定**（呼應 anti-leakage）。
+
+**兩份詳細文件，平時不必載入，僅在下列時機才去讀**（避免本檔肥大）：
+
+- 安裝與前置：[`docs/install.md`](docs/install.md)（安裝指令與說明）。
+- 連線測試：[`docs/test.md`](docs/test.md) ＋ `tests/test_mcp_servers.py`（測試指令與說明）。
+
+**觸發時機**：使用者**第一次使用** `paper-search`／`citation-verification-zh`，或明確要**重新安裝／重新測試**時——才讀取上述文件，並可**主動協助安裝與執行測試**（`conda run -n research python tests/test_mcp_servers.py`，全過印 `ALL PASS`）。其餘情況不需載入這兩份。
 
 ## 已知邊界（本版）
 

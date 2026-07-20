@@ -10,6 +10,17 @@
       "env": {
         "SEMANTIC_SCHOLAR_API_KEY": "${SEMANTIC_SCHOLAR_API_KEY:-}"
       }
+    },
+    "openalex": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "openalex-research-mcp"
+      ],
+      "env": {
+        "OPENALEX_EMAIL": "${OPENALEX_EMAIL:-}",
+        "OPENALEX_API_KEY": "${OPENALEX_API_KEY:-}"
+      }
     }
   }
 }

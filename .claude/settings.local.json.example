@@ -1,5 +1,7 @@
 {
   "env": {
-    "SEMANTIC_SCHOLAR_API_KEY": "YOUR_KEY"
+    "SEMANTIC_SCHOLAR_API_KEY": "YOUR_KEY",
+    "OPENALEX_EMAIL": "your.email@example.com",
+    "OPENALEX_API_KEY": ""
   }
 }

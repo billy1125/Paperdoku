@@ -57,15 +57,11 @@ Suite 版本：0.1.0
 
 ## 前置需求
 
-- **Claude Code**（最新版）。
-- **paper-search 與 citation-verification-zh**：共用 Semantic Scholar MCP；於 `paper-search/README.md` 設定金鑰（無金鑰亦可用，共用匿名速率限制）。MCP 未連線時 `citation-verification-zh` 會誠實告知無法查核，不憑記憶判定。
-- **source-document-extraction**：需 conda 環境 `research`(Python 3.11)與擷取套件：
-  ```bash
-  conda create -n research python=3.11 -y
-  conda run -n research pip install pymupdf pdfplumber pymupdf4llm python-docx mammoth
-  ```
-  裸 `python`/`pip` 已於 `.claude/settings.json` 封鎖；一律走 `conda run -n research`。
-- 其餘 4 個閱讀/分析 skill 為 prompt 驅動，**不需 Python**。
+完整安裝步驟見 [`docs/install.md`](docs/install.md)。外部相依只集中在兩個 skill；其餘 5 個閱讀/分析 skill 為 prompt 驅動，**不需任何外部安裝**。
+
+- **Claude Code**（最新版）——執行整個 suite 的平台。
+- **paper-search 與 citation-verification-zh**：有兩個可用資料源 MCP，可擇一或併用——**Semantic Scholar**（需 `uv`／`uvx` + `git`）與 **OpenAlex**（需 Node.js，`npx` 啟動）。金鑰／email 皆選用（免費）。
+- **source-document-extraction**：需 conda 環境 `research`(Python 3.11)與 `pymupdf`／`pdfplumber`／`pymupdf4llm`／`python-docx`／`mammoth`；裸 `python`/`pip` 已封鎖，一律走 `conda run -n research`。
 
 ## 設計要點
 
@@ -80,6 +76,11 @@ Paperdoku/
   CLAUDE.md            工作方式 + 路由紀律
   README.md            本檔
   MODE_REGISTRY.md     模式 → skill 路由表
+  docs/
+    install.md         安裝與前置需求（外部相依集中處）
+    test.md            MCP 連線測試的指令與說明
+  tests/
+    test_mcp_servers.py  兩個資料源 MCP 的連線測試（conda run 執行）
   papers/              放未轉檔的來源文件（PDF/Word）
   reports/             分析/審查報告的 markdown 輸出
   .claude/

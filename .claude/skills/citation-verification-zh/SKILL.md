@@ -12,12 +12,15 @@ version: 0.1.0
 >
 > 輸出語言見 `../_shared/output_language.md`；資訊不足時的語氣見 `../_shared/confidence_language.md`。
 
-## 前置需求（Semantic Scholar MCP）
+## 前置需求（查核用 MCP）
 
-本 skill 依賴 `semantic-scholar` MCP server（與 `paper-search` skill 共用，設定見 `paper-search/.mcp.json`）。
+本 skill 依賴查核用的 MCP server（與 `paper-search` skill 共用，設定見 `paper-search/.mcp.json`）。有**兩個可用資料源**，可擇一或併用互補：
 
-- 查核前先確認 MCP 可用：在 Claude Code 輸入 `/mcp`，確認 `semantic-scholar` 為 connected。
-- **MCP 不可用時，不要憑記憶判定引用真偽**——明確告知使用者 MCP 未連線、無法查核，並引導其依 `paper-search/README.md` 排查（`uvx` 安裝、API key）。這是 graceful degradation，不是改用記憶。
+- `semantic-scholar`（`uvx` 執行）：以標題／作者比對逐條查核。
+- `openalex`（`npx` 執行）：另提供 `batch_resolve_references`，可**一次批次解析整份參考清單**，特別適合本 skill；命中率與涵蓋範圍與 Semantic Scholar 互補（兩邊都查無時，是更強的風險訊號）。
+
+- 查核前先確認 MCP 可用：在 Claude Code 輸入 `/mcp`，確認要用的 server 為 connected。
+- **MCP 不可用時，不要憑記憶判定引用真偽**——明確告知使用者 MCP 未連線、無法查核，並引導其依 `docs/install.md` 排查（`semantic-scholar` 需 `uv`／`git`；`openalex` 需 Node.js；金鑰／email 見 `settings.local.json`）。這是 graceful degradation，不是改用記憶。
 
 ## 工作流程
 
@@ -26,9 +29,10 @@ version: 0.1.0
    - 給的是整篇論文（PDF）→ 先用 `source-document-extraction` 抽全文，再擷取其 References／參考文獻段落。
    - 只給正文有 in-text citation 但無完整清單 → 提醒使用者：能查的是「參考文獻條目」，in-text 對應需有完整書目資訊才可查。
 
-2. **逐條查核**（每條引用）：
-   - 用 `search_papers` / `paper_relevance_search` 以**標題**為主查詢，輔以第一作者姓氏與年份縮小範圍。
-   - 命中候選後，用 `get_paper` 取回完整 metadata（標題、作者、年份、DOI），與引用逐欄比對。
+2. **逐條查核**（每條引用；工具名以實測 `tools/list` 為準）：
+   - **Semantic Scholar**：用 `search_papers` / `paper_relevance_search` 以**標題**為主查詢，輔以第一作者姓氏與年份縮小範圍；命中候選後用 `get_paper` 取回完整 metadata（標題、作者、年份、DOI）逐欄比對。
+   - **OpenAlex**：用 `search_works` 以標題查詢、`get_work` 取回 metadata 比對；整份清單可用 `batch_resolve_references` 一次批次解析後再逐條核對。
+   - 兩源可互補：一邊查無時，改用另一邊再查一次，降低「未被索引」造成的偽陰性。
 
 3. **分類判定**（四態，見 `references/verdict-rules.md`）：
    | 判定 | 意義 |
