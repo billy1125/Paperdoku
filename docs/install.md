@@ -1,6 +1,6 @@
 # 安裝與前置需求
 
-本檔集中列出 Paperdoku 的所有外部相依與安裝程序。外部相依只集中在兩個 skill；其餘 5 個閱讀/分析 skill（`paper-reading-zh`、`academic-peer-review-zh`、`paper-research-logic-review`、`literature-review-organizer`、`method-extraction-social-science`）為 prompt 驅動，**不需任何外部安裝**。
+本檔集中列出 Paperdoku 的所有外部相依與安裝程序。外部相依集中在三個 skill（`paper-search`、`citation-verification-zh`、`source-document-extraction`，外加匯出用的 `markdown-to-word`）；其餘 5 個閱讀/分析 skill（`paper-reading-zh`、`academic-peer-review-zh`、`paper-research-logic-review`、`literature-review-organizer`、`method-extraction-social-science`）為 prompt 驅動，**不需任何外部安裝**。
 
 ## 總覽
 
@@ -13,6 +13,7 @@
 | Node.js（含 `npx`） | 執行 OpenAlex MCP server | `paper-search`、`citation-verification-zh` | 必要（用 OpenAlex 時；裝 Claude Code 已含） |
 | OpenAlex email／API key | polite pool 提速／premium 存取 | `paper-search`、`citation-verification-zh` | 選用（email 免費、建議填） |
 | conda + Python 3.11 + 擷取套件 | PDF/Word → 結構化 Markdown | `source-document-extraction` | 必要 |
+| `pypandoc` + conda-forge `pandoc` | Markdown 報告 → Word `.docx` | `markdown-to-word` | 選用（要匯出 Word 時） |
 
 `paper-search` 與 `citation-verification-zh` 有**兩個可用資料源 MCP**（Semantic Scholar 與 OpenAlex），可擇一或併用；只想用其中一個時，另一個的前置可略過。
 
@@ -122,3 +123,27 @@ conda run -n research python tests/test_mcp_servers.py
 ```
 
 全部通過會印 `ALL PASS`。測試的細節與疑難排解見 [`test.md`](test.md)。
+
+## 5. markdown-to-word（Markdown 報告 → Word .docx）
+
+把 `reports/` 內的 markdown 報告（精讀摘要、審查意見書、綜整回顧等）轉成 Word `.docx`，供交稿或套期刊樣式範本。以 **Pandoc（透過 `pypandoc`）** 轉換：GFM pipe table 會變成 Word 原生表格。與 `source-document-extraction` 共用同一個 conda 環境 `research`（Python 3.11，跨平台）。
+
+```bash
+conda create -n research python=3.11 -y                 # 若尚未建立
+conda run -n research pip install pypandoc              # Python 封裝
+conda install -n research -c conda-forge pandoc -y      # 原生 pandoc 二進位，全平台通用
+```
+
+驗證 pandoc 可用：
+
+```bash
+conda run -n research python -c "import pypandoc; print(pypandoc.get_pandoc_path())"
+```
+
+有印出 pandoc 路徑即可。實際轉檔範例（沿用來源報告主幹、副檔名改 `.docx`）：
+
+```bash
+conda run -n research python .claude/skills/markdown-to-word/scripts/md_to_docx.py reports/報告.md -o reports/報告.docx
+```
+
+> **勿用 `pypandoc_binary`**：其內含的 pandoc 為 x86_64，macOS Apple Silicon 無 Rosetta 時會報 `bad CPU type in executable`；請改用 conda-forge 的原生 `pandoc`（各平台皆有對應 build）。選項與已知限制見該 skill 的 [`SKILL.md`](../.claude/skills/markdown-to-word/SKILL.md)。

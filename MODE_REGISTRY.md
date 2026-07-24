@@ -19,6 +19,7 @@ Suite 版本：0.1.0
 | **多篇**比較：看假設邏輯與支持狀態 | `paper-research-logic-review` | 3 track（見下） |
 | **多篇**綜整：研究缺口/未來方向/回顧撰寫 | `literature-review-organizer` | 4 目的 × 3 深度（見下） |
 | 完整同儕審查（逐條 Major/Minor+Accept/Reject 判決） | `academic-peer-review-zh` | 依審查者風格（見下） |
+| 把 `reports/` 的 markdown 報告匯出成 Word `.docx` | `markdown-to-word` | —（單一流程） |
 
 ## 二、各 skill 模式清單
 
@@ -65,6 +66,12 @@ Suite 版本：0.1.0
 
 ### paper-search（論文搜尋）
 - 單一線性流程，透過 Semantic Scholar MCP。無 mode。
+
+### markdown-to-word（報告匯出 Word）
+- 單一線性流程、無 mode：把 `reports/` 的 markdown 報告以 Pandoc（`pypandoc`）轉成 Word `.docx`，GFM 表格轉為 Word 原生表格。
+- 選項：`--reference-doc` 套期刊樣式範本、`--make-reference` 產生可編輯的樣式範本。
+- **前置**：conda 環境 `research` ＋ `pypandoc` ＋ conda-forge `pandoc`（見 `docs/install.md` 第 5 節）。
+- **終端匯出層**：只轉格式、不產生內容；上游為任何寫出 `reports/*.md` 的 skill。
 
 ## 三、邊界釐清（易混淆處）
 

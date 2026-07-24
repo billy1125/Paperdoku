@@ -28,6 +28,7 @@ Suite 版本：0.1.0
 | `method-extraction-social-science` | **單篇**社科實證方法架構萃取 | 依方法族分支 |
 | `paper-search` | 透過 Semantic Scholar 搜尋論文、追引用 | 單一流程 |
 | `source-document-extraction` | PDF/Word → 結構化 Markdown;`--figures` 出圖 PNG | 多後端 |
+| `markdown-to-word` | 把 `reports/` 的 markdown 報告轉成 Word `.docx`（GFM 表格轉原生表格） | 單一流程 |
 
 完整的模式對照與路由見 [`MODE_REGISTRY.md`](MODE_REGISTRY.md)；工作方式與規則見 [`CLAUDE.md`](CLAUDE.md)。
 
@@ -57,7 +58,7 @@ Suite 版本：0.1.0
 
 ## 前置需求
 
-外部相依只集中在兩個 skill；其餘 5 個閱讀/分析 skill 為 prompt 驅動，**不需任何外部安裝**。以下為快速安裝指引，完整說明、驗證與疑難排解見 [`docs/install.md`](docs/install.md)。
+外部相依集中在三個 skill（兩個資料源 MCP、擷取、以及選用的 Word 匯出）；其餘 5 個閱讀/分析 skill 為 prompt 驅動，**不需任何外部安裝**。以下為快速安裝指引，完整說明、驗證與疑難排解見 [`docs/install.md`](docs/install.md)。
 
 **1. Claude Code（最新版，全部 skill 的平台）**
 
@@ -88,7 +89,18 @@ conda run -n research pip install pymupdf pdfplumber pymupdf4llm python-docx mam
 
 裸 `python`/`pip` 已於 `.claude/settings.json` 封鎖；一律走 `conda run -n research`。
 
-**4. 驗證兩個資料源 MCP**
+**4. markdown-to-word（選用，把 `reports/` 報告匯出成 Word `.docx`）**
+
+與擷取共用 conda 環境 `research`，再裝 Pandoc：
+
+```bash
+conda run -n research pip install pypandoc
+conda install -n research -c conda-forge pandoc -y
+```
+
+安裝細節與 Apple Silicon 注意事項見 [`docs/install.md`](docs/install.md) 第 5 節。
+
+**5. 驗證兩個資料源 MCP**
 
 裝好後可跑連線測試確認 `semantic-scholar` 與 `openalex` 可實際查詢——**自己在終端機執行**，或直接**請 Claude 代為執行**（開著 Claude Code 時說「幫我跑 MCP 連線測試」即可）：
 
@@ -130,6 +142,7 @@ Paperdoku/
       method-extraction-social-science/
       paper-search/
       source-document-extraction/
+      markdown-to-word/
 ```
 
 ## 交接鏈
@@ -137,7 +150,7 @@ Paperdoku/
 skill 間的交接已文件化於 `.claude/skills/_shared/handoff.md`:
 
 ```
-paper-search ─清單─▶ source-document-extraction ─extracted/*.md─▶ 閱讀/分析/審查層 ─▶ literature-review-organizer
+paper-search ─清單─▶ source-document-extraction ─extracted/*.md─▶ 閱讀/分析/審查層 ─▶ literature-review-organizer ─reports/*.md─▶（選用）markdown-to-word ─▶ .docx
 ```
 
 共用 `extracted/`（抽取全文）與 `output/`（搜尋產物）目錄慣例；每個 skill 自述上下游、收尾建議下一步。**這不是自動 orchestrator**——Claude Code 不會自動連跑 skills，由你推進。

@@ -3,7 +3,8 @@
     "allow": [
       "Bash(conda run -n research python:*)",
       "Bash(conda run -n research pip install:*)",
-      "Bash(conda create -n research:*)"
+      "Bash(conda create -n research:*)",
+      "Bash(conda install -n research:*)"
     ],
     "deny": [
       "Bash(python:*)",

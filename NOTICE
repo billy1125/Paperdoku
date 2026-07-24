@@ -27,3 +27,10 @@ Third-party dependencies (not included in this repository)
 
 - Paper metadata is provided by Semantic Scholar.
   https://www.semanticscholar.org/
+
+- The markdown-to-word skill calls Pandoc (GPL-2.0-or-later) through pypandoc
+  (MIT). Neither Pandoc nor its binaries are bundled in this repository; the
+  user installs them separately via conda-forge. Because the Pandoc binary is
+  not distributed as part of this suite, its GPL terms do not propagate to
+  Paperdoku's own CC BY-NC 4.0 content.
+  https://pandoc.org/  https://github.com/JessicaTegner/pypandoc

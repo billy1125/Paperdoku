@@ -8,8 +8,8 @@ Suite 版本：0.1.0
 
 ## 這是什麼
 
-- 產品本體是 `.claude/skills/` 下的 6 個 skill（prompt 驅動），外加 `_shared/` 共用規範。
-- 這不是一般應用程式專案；除 `source-document-extraction` 內含確定性 Python 腳本外，沒有 build/lint/test 工具鏈。
+- 產品本體是 `.claude/skills/` 下的 9 個 skill（多數 prompt 驅動），外加 `_shared/` 共用規範。
+- 這不是一般應用程式專案；除 `source-document-extraction` 與 `markdown-to-word` 內含確定性 Python 腳本外，沒有 build/lint/test 工具鏈。
 - 本專案設計為**可獨立抽離**：不依賴任何母 repo，整包搬走即可使用。
 
 ## 路由紀律（先分類意圖，再分派）
