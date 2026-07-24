@@ -37,7 +37,7 @@ paper-search ──清單/BibTeX──▶ source-document-extraction ──extra
 | `Readed_Papers/` `Unprocessed_Papers/` | 已處理/未處理論文歸檔 | 分析層（需使用者同意） | — |
 | `reports/` | 各 skill 的書面報告成果（markdown） | 所有閱讀/分析/審查 skill | 使用者、markdown-to-word（可轉 `.docx`） |
 
-（`papers/` 的 PDF/Word 來源受 `.gitignore` 的 `*.pdf`/`*.docx` 忽略；`reports/` 的 `.md` 會進版控；`extracted/`、`output/`、歸檔資料夾屬執行期產物。）
+（`papers/`、`extracted/`、`reports/` 三個資料夾各以自帶的 `.gitignore`〔`*` + `!.gitignore`〕保留在版控、但**內容不進版控**；`output/` 與歸檔資料夾屬執行期產物。）
 
 ## 交接鐵律
 

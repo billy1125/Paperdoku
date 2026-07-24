@@ -1,6 +1,6 @@
 # Paperdoku
 
-一套用於**論文閱讀與文獻整理**的 Claude Code skill suite，涵蓋從搜尋、擷取、精讀到多篇綜整的工作流。繁體中文優先，設計哲學參考 human-in-the-loop 的學術研究工具（如 Academic Research Skills）：**AI 是副駕駛，幫你處理精讀、比較、查證的粗活，判斷與詮釋仍由你來。**
+一套用於**論文閱讀與文獻整理**的 Claude Code skill suite，涵蓋從搜尋、擷取、精讀、多篇綜整到 Word 匯出的工作流。繁體中文優先，設計哲學參考 human-in-the-loop 的學術研究工具（如 Academic Research Skills）：**AI 是副駕駛，幫你處理精讀、比較、查證的粗活，判斷與詮釋仍由你來。**
 
 Suite 版本：0.1.0
 
@@ -11,7 +11,7 @@ Suite 版本：0.1.0
 - **功能範圍**：Paperdoku 協助論文的搜尋、擷取、閱讀、方法抽取、邏輯與同儕審查、引用查核與文獻綜整。所有摘要、評論、評分與判決都是**輔助性質**，不取代你自己的專業判斷。
 - **以原文為準，不憑記憶**：各 skill 遵守 anti-leakage 鐵律，只根據你提供的原文作答；但 AI 仍可能誤讀、遺漏或過度推論，**採用任何結論前請自行核對原文**。
 - **側專案性質**：這是個人研究與測試性質的側專案，內容大量與 AI 共創，測試尚未完整，可能含錯誤或 bug，並非正式、穩定或已完整驗證的產品。
-- **不保證正確**：AI 的閱讀摘要、審查意見、方法判讀，以及來自 Semantic Scholar 的引用查核結果（找到／查無／資訊不足）**不保證正確或完整**。引用查核尤其只是 advisory 風險訊號——「查無」不等於引用一定是假的（可能只是未被索引）。一切採用前請自行查證。
+- **不保證正確**：AI 的閱讀摘要、審查意見、方法判讀，以及來自論文資料庫 MCP（Semantic Scholar／OpenAlex）的引用查核結果（找到／查無／資訊不足）**不保證正確或完整**。引用查核尤其只是 advisory 風險訊號——「查無」不等於引用一定是假的（可能只是未被索引）。一切採用前請自行查證。
 - **學術誠信**：AI 的產出僅供輔助，作者對最終文稿、研究宣稱、資料與投稿內容負完全責任，並須遵守所屬機構與期刊的誠信規範。
 - **著作權與素材**：放入 `papers/` 的第三方期刊論文須為**合法取得**，僅供個人研究閱讀與分析之用，不得違反出版商服務條款。轉檔產物（`extracted/`）與報告（`reports/`）請自行妥善保管。
 - **風險自負 / Use at your own risk.**
@@ -22,11 +22,11 @@ Suite 版本：0.1.0
 |---|---|---|
 | `paper-reading-zh` | **單篇**論文深入閱讀 | quick-scan / full（預設） / socratic / claim-audit |
 | `academic-peer-review-zh` | **單篇**完整同儕審查（下 Accept/Reject 判決；含 RoB、證據等級） | 單一（嚴格/中立/發展） / panel / calibration |
-| `citation-verification-zh` | 查核參考文獻**是否真實存在**（揪幻覺引用） | 用 Semantic Scholar MCP |
+| `citation-verification-zh` | 查核參考文獻**是否真實存在**（揪幻覺引用） | 用論文資料庫 MCP（Semantic Scholar／OpenAlex） |
 | `paper-research-logic-review` | **多篇**研究邏輯審查（假設建構與支持狀態） | 3 track |
 | `literature-review-organizer` | **多篇**綜整（比較表/缺口/未來方向/回顧；含 PRISMA） | 4 目的 × 4 深度（含 systematic review） |
 | `method-extraction-social-science` | **單篇**社科實證方法架構萃取 | 依方法族分支 |
-| `paper-search` | 透過 Semantic Scholar 搜尋論文、追引用 | 單一流程 |
+| `paper-search` | 透過論文資料庫 MCP（Semantic Scholar／OpenAlex）搜尋論文、追引用 | 單一流程 |
 | `source-document-extraction` | PDF/Word → 結構化 Markdown;`--figures` 出圖 PNG | 多後端 |
 | `markdown-to-word` | 把 `reports/` 的 markdown 報告轉成 Word `.docx`（GFM 表格轉原生表格） | 單一流程 |
 
@@ -127,11 +127,14 @@ Paperdoku/
     install.md         安裝與前置需求（外部相依集中處）
     test.md            MCP 連線測試的指令與說明
   tests/
-    test_mcp_servers.py  兩個資料源 MCP 的連線測試（conda run 執行）
+    test_mcp_servers.py       兩個資料源 MCP 的連線測試（conda run 執行）
+    test_skill_frontmatter.py SKILL.md frontmatter YAML 守門測試
   papers/              放未轉檔的來源文件（PDF/Word）
+  extracted/           擷取後的 .md（閱讀來源）
   reports/             分析/審查報告的 markdown 輸出
+                       （以上三資料夾各以自帶 .gitignore 保留、內容不進版控）
   .claude/
-    settings.json      權限(封鎖裸 python,允許 conda run)
+    settings.json      權限(封鎖裸 python,允許 conda run/create/install)
     skills/
       _shared/         共用規範(10 檔;無 SKILL.md,非 skill)
       paper-reading-zh/
@@ -164,4 +167,7 @@ paper-search ─清單─▶ source-document-extraction ─extracted/*.md─▶ 
 
 本 suite 以 **[CC-BY-NC 4.0](LICENSE)**（創用 CC 姓名標示—非商業性 4.0）釋出 © 2026 Cho-Hsun Lu（billy1125）。你可自由分享與修改，但**須標示來源、且不得作商業使用**。內容依「現狀（AS IS）」提供，不負擔任何擔保責任，詳見上方免責聲明。完整授權條文見 [`LICENSE`](LICENSE)；著作權、署名與第三方聲明見 [`NOTICE`](NOTICE)。
 
-本 suite 的設計理念參考了 [**Academic Research Skills**](https://github.com/Imbad0202/academic-research-skills)（作者 Cheng-I Wu，亦採 CC-BY-NC 4.0）的精神與思路；依其授權標示來源：`Based on Academic Research Skills by Cheng-I Wu`。`paper-search` 與 `citation-verification-zh` 透過 `.mcp.json` 呼叫的 **Semantic Scholar MCP server**（外部相依 [`akapet00/semantic-scholar-mcp`](https://github.com/akapet00/semantic-scholar-mcp)，經 `uvx` 執行）不屬於本 repo，其著作權歸原作者；論文資料來源為 [Semantic Scholar](https://www.semanticscholar.org/)。
+本 suite 的設計理念參考了 [**Academic Research Skills**](https://github.com/Imbad0202/academic-research-skills)（作者 Cheng-I Wu，亦採 CC-BY-NC 4.0）的精神與思路；依其授權標示來源：`Based on Academic Research Skills by Cheng-I Wu`。下列外部相依皆**不屬於本 repo**、各依原授權，由使用者自行安裝：
+
+- `paper-search` 與 `citation-verification-zh` 透過 `.mcp.json` 呼叫的兩個論文資料庫 MCP server——[`akapet00/semantic-scholar-mcp`](https://github.com/akapet00/semantic-scholar-mcp)（經 `uvx`，資料來源 [Semantic Scholar](https://www.semanticscholar.org/)）與 [`openalex-research-mcp`](https://www.npmjs.com/package/openalex-research-mcp)（MIT，經 `npx`，資料來源 [OpenAlex](https://openalex.org/)）。
+- `markdown-to-word` 透過 `pypandoc`（MIT）呼叫的 **Pandoc**（GPL-2.0-or-later，經 conda-forge 安裝）。本 repo 不打包其二進位，故 GPL 不擴散至本 suite。詳見 [`NOTICE`](NOTICE)。
