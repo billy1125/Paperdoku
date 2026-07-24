@@ -1,8 +1,6 @@
 # Paperdoku
 
-一套用於**論文閱讀與文獻整理**的 Claude Code skill suite，涵蓋從搜尋、擷取、精讀、多篇綜整到 Word 匯出的工作流。繁體中文優先，設計哲學參考 human-in-the-loop 的學術研究工具（如 Academic Research Skills）：**AI 是副駕駛，幫你處理精讀、比較、查證的粗活，判斷與詮釋仍由你來。**
-
-Suite 版本：0.1.0
+一套用於**研究設計與論文閱讀整理**的 Claude Code skill suite，分兩條可獨立運作、前後有關聯但不相依的 pipeline：**研究設計 pipeline（前段）**——發想方向 → 掌握文獻 → 系統盤點/定缺口 → 檢驗關鍵文獻可信度 → 收斂研究問題；**論文閱讀 pipeline（後段）**——搜尋 → 擷取 → 精讀/分析 → 多篇綜整 → Word 匯出。繁體中文優先，設計哲學參考 human-in-the-loop 的學術研究工具（如 Academic Research Skills）：**AI 是副駕駛，幫你處理發想、盤點、精讀、比較、查證的粗活，判斷與詮釋仍由你來。**
 
 ## ⚠️ 免責聲明與使用須知 / Disclaimer
 
@@ -18,6 +16,18 @@ Suite 版本：0.1.0
 
 ## 技能一覽
 
+### 研究設計 pipeline（前段）
+
+| Skill | 做什麼 | 產物 |
+|---|---|---|
+| `research-brainstorming-zh` | 研究早期**發散**：產生/整理/挑戰/透明排序候選研究方向 | `research-design/<主題>-brainstorm.md` |
+| `literature-scoping-zh` | 發現期**系統盤點**：文獻地圖＋主題群集＋**定研究缺口** | `research-design/<主題>-scoping.md` |
+| `scholar-evaluation-zh` | 以 ScholarEval 八維度**檢驗關鍵文獻可信度**、加權排序（不判決） | `research-design/<主題>-credibility.md` |
+| `hypothesis-generation-zh` | **收斂**成可檢驗假設：競爭假設＋品質評估＋預測＋檢驗設計 | `research-design/<主題>-hypotheses.md` |
+| `paper-search` | 透過論文資料庫 MCP 搜尋論文、追引用（前後段共用） | 清單／`output/*.bib` |
+
+### 論文閱讀 pipeline（後段）
+
 | Skill | 做什麼 | 模式 |
 |---|---|---|
 | `paper-reading-zh` | **單篇**論文深入閱讀 | quick-scan / full（預設） / socratic / claim-audit |
@@ -26,7 +36,6 @@ Suite 版本：0.1.0
 | `paper-research-logic-review` | **多篇**研究邏輯審查（假設建構與支持狀態） | 3 track |
 | `literature-review-organizer` | **多篇**綜整（比較表/缺口/未來方向/回顧；含 PRISMA） | 4 目的 × 4 深度（含 systematic review） |
 | `method-extraction-social-science` | **單篇**社科實證方法架構萃取 | 依方法族分支 |
-| `paper-search` | 透過論文資料庫 MCP（Semantic Scholar／OpenAlex）搜尋論文、追引用 | 單一流程 |
 | `source-document-extraction` | PDF/Word → 結構化 Markdown;`--figures` 出圖 PNG | 多後端 |
 | `markdown-to-word` | 把 `reports/` 的 markdown 報告轉成 Word `.docx`（GFM 表格轉原生表格） | 單一流程 |
 
@@ -37,6 +46,10 @@ Suite 版本：0.1.0
 安裝為專案技能後（skills 位於 `.claude/skills/`,Claude Code 會自動辨識），直接用自然語言或斜線指令觸發：
 
 ```text
+幫我發想幾個研究方向              → research-brainstorming-zh
+盤點這主題的文獻、找研究缺口       → literature-scoping-zh
+評估這幾篇關鍵文獻可不可信         → scholar-evaluation-zh
+把方向收斂成可檢驗的假設          → hypothesis-generation-zh
 精讀這篇論文                      → paper-reading-zh (full)
 快速掃一下這篇值不值得讀           → paper-reading-zh (quick-scan)
 幫我審這篇投稿論文、給修改意見       → academic-peer-review-zh
@@ -58,7 +71,7 @@ Suite 版本：0.1.0
 
 ## 前置需求
 
-外部相依集中在三個 skill（兩個資料源 MCP、擷取、以及選用的 Word 匯出）；其餘 5 個閱讀/分析 skill 為 prompt 驅動，**不需任何外部安裝**。以下為快速安裝指引，完整說明、驗證與疑難排解見 [`docs/install.md`](docs/install.md)。
+外部相依集中在三個 skill（兩個資料源 MCP、擷取、以及選用的 Word 匯出）；其餘 9 個閱讀/分析與研究設計 skill 皆為 prompt 驅動，**不需任何外部安裝**（前段 4 個研究設計 skill 的搜尋步驟共用同一組 MCP，無額外相依）。以下為快速安裝指引，完整說明、驗證與疑難排解見 [`docs/install.md`](docs/install.md)。
 
 **1. Claude Code（最新版，全部 skill 的平台）**
 
@@ -131,32 +144,41 @@ Paperdoku/
     test_skill_frontmatter.py SKILL.md frontmatter YAML 守門測試
   papers/              放未轉檔的來源文件（PDF/Word）
   extracted/           擷取後的 .md（閱讀來源）
-  reports/             分析/審查報告的 markdown 輸出
-                       （以上三資料夾各以自帶 .gitignore 保留、內容不進版控）
+  reports/             後段分析/審查報告的 markdown 輸出
+  research-design/     前段研究設計 pipeline 的產物 markdown
+                       （以上四資料夾各以自帶 .gitignore 保留、內容不進版控）
   .claude/
     settings.json      權限(封鎖裸 python,允許 conda run/create/install)
     skills/
-      _shared/         共用規範(10 檔;無 SKILL.md,非 skill)
-      paper-reading-zh/
-      academic-peer-review-zh/
-      citation-verification-zh/
-      paper-research-logic-review/
-      literature-review-organizer/
-      method-extraction-social-science/
-      paper-search/
-      source-document-extraction/
-      markdown-to-word/
+      _shared/         共用規範(11 檔;無 SKILL.md,非 skill)
+      research-brainstorming-zh/        ┐
+      literature-scoping-zh/            │ 前段：研究設計 pipeline
+      scholar-evaluation-zh/            │
+      hypothesis-generation-zh/         ┘
+      paper-reading-zh/                 ┐
+      academic-peer-review-zh/          │
+      citation-verification-zh/         │
+      paper-research-logic-review/      │ 後段：論文閱讀 pipeline
+      literature-review-organizer/      │
+      method-extraction-social-science/ │
+      paper-search/                     │（前後段共用搜尋入口）
+      source-document-extraction/       │
+      markdown-to-word/                 ┘
 ```
 
 ## 交接鏈
 
-skill 間的交接已文件化於 `.claude/skills/_shared/handoff.md`:
+skill 間的交接已文件化於 `.claude/skills/_shared/handoff.md`，兩條 pipeline 以橋接點相接：
 
 ```
-paper-search ─清單─▶ source-document-extraction ─extracted/*.md─▶ 閱讀/分析/審查層 ─▶ literature-review-organizer ─reports/*.md─▶（選用）markdown-to-word ─▶ .docx
+前段：research-brainstorming-zh ─▶ paper-search ─▶ literature-scoping-zh ─▶ scholar-evaluation-zh ─▶ hypothesis-generation-zh
+      （產物皆在 research-design/）                        │
+                          【橋接點】前段挑出的關鍵論文 → papers/ ┘
+                                                          ▼
+後段：paper-search ─清單─▶ source-document-extraction ─extracted/*.md─▶ 閱讀/分析/審查層 ─▶ literature-review-organizer ─reports/*.md─▶（選用）markdown-to-word ─▶ .docx
 ```
 
-共用 `extracted/`（抽取全文）與 `output/`（搜尋產物）目錄慣例；每個 skill 自述上下游、收尾建議下一步。**這不是自動 orchestrator**——Claude Code 不會自動連跑 skills，由你推進。
+共用 `extracted/`（抽取全文）、`output/`（搜尋產物）、`research-design/`（前段產物）目錄慣例；每個 skill 自述上下游、收尾建議下一步。**這不是自動 orchestrator**——Claude Code 不會自動連跑 skills，由你推進。
 
 ## 已知限制（本版）
 

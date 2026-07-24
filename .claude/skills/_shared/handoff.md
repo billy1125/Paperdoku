@@ -10,7 +10,25 @@ Claude Code **沒有自動 orchestrator** 連續跑多個 skill。這裡的「�
 2. **每個 skill 自述上下游**——知道自己吃什麼、產什麼、接誰。
 3. **收尾建議下一步**——skill 做完主動建議下一個 skill 與可傳的產物，但**不自動執行**，由使用者決定。
 
-## 交接鏈
+## 兩條 pipeline
+
+Paperdoku 分兩條可獨立運作、前後有關聯但不相依的 pipeline。前段在「動筆讀論文之前」找方向與定位，後段在「拿到論文之後」讀懂與整理，以**橋接點**相接但不共用產物資料夾、不自動串接。
+
+## 前段交接鏈（研究設計 pipeline）
+
+```
+research-brainstorming-zh ──▶ paper-search ──▶ literature-scoping-zh ──▶ scholar-evaluation-zh ──▶ hypothesis-generation-zh
+ (發散方向)                    (掌握文獻,共用)   (系統盤點/定缺口)          (關鍵文獻可信度)            (收斂研究問題)
+      │                                              │                          │                          │
+      └──── 產物一律寫到 research-design/<主題>-{brainstorm,scoping,credibility,hypotheses}.md ──────────────┘
+                                                     │
+                          【橋接點】前段挑出的關鍵論文 → 使用者放進 papers/ → 接後段擷取層
+```
+
+- 前段搜尋一律經 `paper-search`／MCP；`scholar-evaluation-zh`／`literature-scoping-zh` 要細評方法需先 `source-document-extraction` 抽全文。
+- 前段共用紀律見 `research_design_discipline.md`。`hypothesis-generation-zh` 收斂出的研究問題，也可拿去後段 `literature-review-organizer` 的 systematic review 做正式回顧。
+
+## 後段交接鏈（論文閱讀 pipeline）
 
 ```
 paper-search ──清單/BibTeX──▶ source-document-extraction ──extracted/*.md──▶ 閱讀/分析/審查層 ──▶ literature-review-organizer ──▶ reports/*.md ──(選用)──▶ markdown-to-word
@@ -36,8 +54,9 @@ paper-search ──清單/BibTeX──▶ source-document-extraction ──extra
 | `output/` | 搜尋清單、`references-*.bib` | paper-search | 使用者、可餵給分析層 |
 | `Readed_Papers/` `Unprocessed_Papers/` | 已處理/未處理論文歸檔 | 分析層（需使用者同意） | — |
 | `reports/` | 各 skill 的書面報告成果（markdown） | 所有閱讀/分析/審查 skill | 使用者、markdown-to-word（可轉 `.docx`） |
+| `research-design/` | **前段** pipeline 產物（`<主題>-brainstorm/scoping/credibility/hypotheses.md`） | 前段 4 個 skill | 使用者、下游前段 skill、（橋接後）後段 |
 
-（`papers/`、`extracted/`、`reports/` 三個資料夾各以自帶的 `.gitignore`〔`*` + `!.gitignore`〕保留在版控、但**內容不進版控**；`output/` 與歸檔資料夾屬執行期產物。）
+（`papers/`、`extracted/`、`reports/`、`research-design/` 四個資料夾各以自帶的 `.gitignore`〔`*` + `!.gitignore`〕保留在版控、但**內容不進版控**；`output/` 與歸檔資料夾屬執行期產物。）
 
 ## 交接鐵律
 
@@ -48,6 +67,8 @@ paper-search ──清單/BibTeX──▶ source-document-extraction ──extra
 
 ## 典型串法（使用者手動，skill 收尾提示）
 
+- **從發想到研究問題（前段全程）**：research-brainstorming-zh（發散方向）→ paper-search（掌握文獻）→ literature-scoping-zh（盤點＋定缺口）→ scholar-evaluation-zh（篩查關鍵文獻可信度）→ hypothesis-generation-zh（收斂成可檢驗假設）。產物皆在 `research-design/`。
+- **前段橋接到後段**：前段挑出必讀關鍵論文 → 使用者放進 `papers/` → source-document-extraction（抽）→ paper-reading-zh／literature-review-organizer（後段細讀或正式回顧）。
 - **從一個主題到綜整**：paper-search（找）→ 下載 PDF → source-document-extraction（抽）→ literature-review-organizer（綜整，或 systematic review）。
 - **讀懂並審一篇**：source-document-extraction（抽）→ paper-reading-zh（精讀）→ academic-peer-review-zh（審查）→ citation-verification-zh（查引用）。
 - **報告交稿成 Word**：任一分析/審查 skill 寫出 `reports/*.md` →（要交稿或套期刊樣式）markdown-to-word 轉同主幹 `.docx`。

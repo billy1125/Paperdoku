@@ -2,13 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-本檔提供 Claude Code 在此專案工作時的通用指引。Paperdoku 是一套**論文閱讀與文獻整理**的 Claude Code skill suite，涵蓋：搜尋 → 擷取 → 閱讀/分析 → 綜整 → 匯出（Word）。
+本檔提供 Claude Code 在此專案工作時的通用指引。Paperdoku 是一套**研究設計與論文閱讀整理**的 Claude Code skill suite，分兩條可獨立運作、前後有關聯但不相依的 pipeline：**研究設計 pipeline（前段）** 發想方向 → 掌握文獻 → 系統盤點/定缺口 → 檢驗關鍵文獻可信度 → 收斂研究問題；**論文閱讀 pipeline（後段）** 搜尋 → 擷取 → 閱讀/分析 → 綜整 → 匯出（Word）。
 
 Suite 版本：0.1.0
 
 ## 這是什麼
 
-- 產品本體是 `.claude/skills/` 下的 9 個 skill（多數 prompt 驅動），外加 `_shared/` 共用規範。
+- 產品本體是 `.claude/skills/` 下的 13 個 skill（多數 prompt 驅動），外加 `_shared/` 共用規範。
 - 這不是一般應用程式專案；除 `source-document-extraction` 與 `markdown-to-word` 內含確定性 Python 腳本外，沒有 build/lint/test 工具鏈。
 - 本專案設計為**可獨立抽離**：不依賴任何母 repo，整包搬走即可使用。
 
@@ -16,7 +16,9 @@ Suite 版本：0.1.0
 
 收到需求時，先分類，再依 `MODE_REGISTRY.md` 分派到唯一的 skill+mode:
 
-1. **明確指定** — 使用者點名 skill 或用單一明確觸發語（如「精讀這篇」「多篇比較」「搜尋論文」「這份 PDF 讀不到」）：
+0. **先分兩條 pipeline（最上層，維持不混雜）** — 動筆讀論文**之前**的需求（發想研究方向、找/盤點文獻、定研究缺口、檢驗關鍵文獻可信度、收斂研究問題）走**研究設計 pipeline（前段）**，產物到 `research-design/`：發散 → `research-brainstorming-zh`；掌握文獻 → `paper-search`；系統盤點/定缺口 → `literature-scoping-zh`；檢驗可信度 → `scholar-evaluation-zh`；收斂假設 → `hypothesis-generation-zh`。拿到論文**之後**的需求（讀懂/審查/綜整手上的論文）走**論文閱讀 pipeline（後段）**，見下列第 1–6 點，產物到 `reports/`。兩段用橋接點相接（前段挑出的關鍵論文 → `papers/` → 後段擷取層），但不共用產物資料夾、不自動串接。前段兩組易混淆界線：`literature-scoping-zh`（發現期盤點、吃 metadata）≠ `literature-review-organizer`（後段、吃全文綜整）；`scholar-evaluation-zh`（可信度篩查、不判決）≠ `academic-peer-review-zh`（投稿審查、下判決）。
+
+1. **明確指定** — 使用者點名 skill 或用單一明確觸發語（如「精讀這篇」「多篇比較」「搜尋論文」「這份 PDF 讀不到」「發想研究方向」「收斂成假設」）：
    → 直接路由，不多問。
 
 2. **單篇 vs 多篇** — 對象是**一篇**論文偏深入理解 → `paper-reading-zh`；對象是**多篇**要比較 → 多篇 skill（見下第 3 點分流）。
@@ -35,13 +37,13 @@ Suite 版本：0.1.0
 
 ## 基本操作流程
 
-資料夾三分工：`papers/`（未轉檔的來源文件 PDF/Word）、`extracted/`（轉檔後的 `.md`、閱讀來源，既有慣例）、`reports/`（書面報告輸出）。收到論文相關請求時走以下三步：
+資料夾分工：**後段** `papers/`（未轉檔的來源文件 PDF/Word）、`extracted/`（轉檔後的 `.md`、閱讀來源，既有慣例）、`reports/`（書面報告輸出）；**前段** `research-design/`（研究設計 pipeline 的產物：`<主題>-brainstorm.md`／`-scoping.md`／`-credibility.md`／`-hypotheses.md`）。前段搜尋產出的 BibTeX 仍沿用 `paper-search` 慣例寫到 `output/`。收到論文相關請求時走以下三步：
 
 1. **先確認指令類型（意圖）**：使用者若只丟文件、或只說「幫我看一下」而未點名意圖，**先列一份精簡意圖選單請他選**（精讀 / 快掃 / 方法萃取 / 多篇比較 / 審查 / 查引用），對照 `MODE_REGISTRY.md` 分派，不擅自預設。此步是路由紀律第 6 點（模糊素材先澄清）的延伸。
 2. **來源預設看 `papers/`**：論文來源檔放在 `papers/`。動手前先確認對應的 `extracted/*.md` 是否已存在——**若尚未轉檔，先用 `source-document-extraction` 把 `papers/` 的來源檔轉成 `extracted/*.md` 再讀**，不對 PDF 直接動手（見 `_shared/handoff.md` 交接鐵律）。
 3. **成果一律輸出到 `reports/`**：凡產出書面成果的 skill/模式，最終成品直接寫成 markdown 存到 `reports/`（互動過程仍在對話）。檔名格式 `<來源論文主幹或主題>-<skill 或模式>.md`，來源主幹沿用 `_shared/paper_naming_convention.md`（例：`2024-Wang-Forecasting-peer-review.md`）；同名已存在先確認再覆寫。要把報告交稿成 Word `.docx` 時，用 `markdown-to-word`（終端匯出、只轉格式不產內容；需 `pypandoc`＋pandoc）。
 
-`papers/`、`extracted/`、`reports/` 三個資料夾各以自帶的 `.gitignore`（`*` + `!.gitignore`）保留在版控、但**內容不進版控**；產出報告不必特別 `git add`。
+`papers/`、`extracted/`、`reports/`、`research-design/` 四個資料夾各以自帶的 `.gitignore`（`*` + `!.gitignore`）保留在版控、但**內容不進版控**；產出報告不必特別 `git add`。
 
 ## 關鍵規則
 
@@ -67,6 +69,7 @@ Suite 版本：0.1.0
 | `figure_fidelity.md` | 圖表查核：圖是否支撐 caption/宣稱（用 --figures 取圖 PNG,advisory） |
 | `handoff.md` | skill 間交接鏈：產物/目錄慣例、交接鐵律、收尾建議下一步 |
 | `output_language.md` | 輸出語言與術語慣例 |
+| `research_design_discipline.md` | 前段 pipeline 共用紀律：提案非發現、主張分類標記、anti-leakage 延伸、反缺口膨脹、三件事分離 |
 
 `_shared/` 無 SKILL.md，不會被當成 skill 載入。
 
