@@ -7,7 +7,7 @@
 Claude Code **沒有自動 orchestrator** 連續跑多個 skill。這裡的「交接」= 三件事，不是自動串接：
 
 1. **共用產物/目錄慣例**——下游 skill 知道去哪讀上游產物。
-2. **每個 skill 自述上下游**——知道自己吃什麼、產什麼、接誰。
+2. **每個 skill 自述上下游**——知道自己吃什麼、產什麼、接誰。**例外**：外部匯入（vendored）的 skill 為維持可攜性，其文件不含本專案的路徑與 skill 名，故不自述上下游，接線改寫在本檔（見「擷取層接線」節）。
 3. **收尾建議下一步**——skill 做完主動建議下一個 skill 與可傳的產物，但**不自動執行**，由使用者決定。
 
 ## 兩條 pipeline
@@ -44,6 +44,16 @@ paper-search ──清單/BibTeX──▶ source-document-extraction ──extra
 - **閱讀/分析/審查層**：讀 `extracted/*.md` 做精讀、方法萃取、邏輯審查、同儕審查、引用驗證。
 - **綜整層**：`literature-review-organizer` 把多篇整理成綜整/研究缺口/系統性回顧。
 - **匯出層（終端、選用）**：`markdown-to-word` 把 `reports/*.md` 轉成 Word `.docx`，供交稿或套期刊樣式範本；只轉格式、不產生內容。
+
+## 擷取層接線（source-document-extraction 為外部匯入 skill）
+
+`source-document-extraction` 是**外部匯入（vendored）**的技能：它遵循 Agent Skills 開放規格、刻意不綁定任何 repo，其 `SKILL.md`／`README.md`／`CLAUDE.md` 一律不寫本專案的路徑、目錄結構與其他 skill 名，因此**不自述上下游**。Paperdoku 的接線由本節定義：
+
+- **上游**：使用者放進 `papers/` 的來源檔、`paper-search` 的候選（下載 PDF 後），或前段 `literature-scoping-zh`／`scholar-evaluation-zh` 挑出的關鍵論文（橋接點）。來源檔**保留不動**，只作對照與回溯。
+- **下游**：產出 `extracted/<主幹>.md`，供後段閱讀/分析/審查層（`paper-reading-zh`、`method-extraction-social-science`、`paper-research-logic-review`、`academic-peer-review-zh`、`citation-verification-zh`、`literature-review-organizer`）直接 Read；前段兩個 skill 要細評方法時亦讀此產物。
+- **輸出路徑：不要用 `-o`**。該 skill 的 `SKILL.md` 寫「若使用者的專案有既定的存放位置或檔名，用 `-o` 顯式指定」——Paperdoku 的既定位置正好等於它 `SDE_OUT_DIR` 的預設值 `extracted/`，維持預設即可；用 `-o` 把產物寫到別處會違反下面的交接鐵律第 1 條。
+- **收尾建議下一步由代理補**（鐵律第 3 條）：該 skill 本身不會提示，抽完後由代理接一句「已抽成 `extracted/X.md`，要精讀可用 `paper-reading-zh`」。
+- **更新方式**：整包覆蓋上游版本。**不要在該 skill 目錄內加回本專案的路徑或 skill 名**——下次覆蓋就會遺失；要調整接線改本節。
 
 ## 產物與目錄慣例
 

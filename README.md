@@ -1,6 +1,11 @@
 # Paperdoku
 
-一套用於**研究設計與論文閱讀整理**的 Claude Code skill suite，分兩條可獨立運作、前後有關聯但不相依的 pipeline：**研究設計 pipeline（前段）**——發想方向 → 掌握文獻 → 系統盤點/定缺口 → 檢驗關鍵文獻可信度 → 收斂研究問題；**論文閱讀 pipeline（後段）**——搜尋 → 擷取 → 精讀/分析 → 多篇綜整 → Word 匯出。繁體中文優先，設計哲學參考 human-in-the-loop 的學術研究工具（如 Academic Research Skills）：**AI 是副駕駛，幫你處理發想、盤點、精讀、比較、查證的粗活，判斷與詮釋仍由你來。**
+一套用於**研究設計與論文閱讀整理**的 Claude Code skill suite，分兩條可獨立運作、前後有關聯但不相依的 pipeline：
+
+- **研究設計 pipeline（前段）**——發想方向 → 掌握文獻 → 系統盤點/定缺口 → 檢驗關鍵文獻可信度 → 收斂研究問題
+- **論文閱讀 pipeline（後段）**——搜尋 → 擷取 → 精讀/分析 → 多篇綜整 → Word 匯出
+
+繁體中文優先，設計哲學參考 human-in-the-loop 的學術研究工具（如 Academic Research Skills）：**AI 是副駕駛，幫你處理發想、盤點、精讀、比較、查證的粗活，判斷與詮釋仍由你來。**
 
 ## ⚠️ 免責聲明與使用須知 / Disclaimer
 
@@ -9,7 +14,7 @@
 - **功能範圍**：Paperdoku 協助論文的搜尋、擷取、閱讀、方法抽取、邏輯與同儕審查、引用查核與文獻綜整。所有摘要、評論、評分與判決都是**輔助性質**，不取代你自己的專業判斷。
 - **以原文為準，不憑記憶**：各 skill 遵守 anti-leakage 鐵律，只根據你提供的原文作答；但 AI 仍可能誤讀、遺漏或過度推論，**採用任何結論前請自行核對原文**。
 - **側專案性質**：這是個人研究與測試性質的側專案，內容大量與 AI 共創，測試尚未完整，可能含錯誤或 bug，並非正式、穩定或已完整驗證的產品。
-- **不保證正確**：AI 的閱讀摘要、審查意見、方法判讀，以及來自論文資料庫 MCP（Semantic Scholar／OpenAlex）的引用查核結果（找到／查無／資訊不足）**不保證正確或完整**。引用查核尤其只是 advisory 風險訊號——「查無」不等於引用一定是假的（可能只是未被索引）。一切採用前請自行查證。
+- **不保證正確**：AI 的閱讀摘要、審查意見、方法判讀，以及論文資料庫 MCP（Semantic Scholar／OpenAlex）的引用查核結果，**皆不保證正確或完整**。引用查核只是 advisory 風險訊號——「查無」不等於引用是假的，可能只是未被索引。採用前請自行查證。
 - **學術誠信**：AI 的產出僅供輔助，作者對最終文稿、研究宣稱、資料與投稿內容負完全責任，並須遵守所屬機構與期刊的誠信規範。
 - **著作權與素材**：放入 `papers/` 的第三方期刊論文須為**合法取得**，僅供個人研究閱讀與分析之用，不得違反出版商服務條款。轉檔產物（`extracted/`）與報告（`reports/`）請自行妥善保管。
 - **風險自負 / Use at your own risk.**
@@ -36,14 +41,14 @@
 | `paper-research-logic-review` | **多篇**研究邏輯審查（假設建構與支持狀態） | 3 track |
 | `literature-review-organizer` | **多篇**綜整（比較表/缺口/未來方向/回顧；含 PRISMA） | 4 目的 × 4 深度（含 systematic review） |
 | `method-extraction-social-science` | **單篇**社科實證方法架構萃取 | 依方法族分支 |
-| `source-document-extraction` | PDF/Word → 結構化 Markdown;`--figures` 出圖 PNG | 多後端 |
+| `source-document-extraction` | PDF/Word → 結構化 Markdown（兩者皆預設清理）；`--figures` 出圖 PNG（**外部匯入**） | 多後端 |
 | `markdown-to-word` | 把 `reports/` 的 markdown 報告轉成 Word `.docx`（GFM 表格轉原生表格） | 單一流程 |
 
 完整的模式對照與路由見 [`MODE_REGISTRY.md`](MODE_REGISTRY.md)；工作方式與規則見 [`CLAUDE.md`](CLAUDE.md)。
 
 ## 快速開始
 
-安裝為專案技能後（skills 位於 `.claude/skills/`,Claude Code 會自動辨識），直接用自然語言或斜線指令觸發：
+skills 位於 `.claude/skills/`，Claude Code 會自動辨識。直接用自然語言或斜線指令觸發：
 
 ```text
 幫我發想幾個研究方向              → research-brainstorming-zh
@@ -71,7 +76,9 @@
 
 ## 前置需求
 
-外部相依集中在三個 skill（兩個資料源 MCP、擷取、以及選用的 Word 匯出）；其餘 9 個閱讀/分析與研究設計 skill 皆為 prompt 驅動，**不需任何外部安裝**（前段 4 個研究設計 skill 的搜尋步驟共用同一組 MCP，無額外相依）。以下為快速安裝指引，完整說明、驗證與疑難排解見 [`docs/install.md`](docs/install.md)。
+外部相依只集中在三處：兩個資料源 MCP、擷取，以及選用的 Word 匯出。其餘 9 個 skill 皆為 prompt 驅動，**不需任何外部安裝**（前段研究設計 skill 的搜尋步驟共用同一組 MCP，無額外相依）。
+
+以下為快速安裝指引；完整說明、驗證與疑難排解見 [`docs/install.md`](docs/install.md)。
 
 **1. Claude Code（最新版，全部 skill 的平台）**
 
@@ -98,9 +105,13 @@ npm install -g @anthropic-ai/claude-code
 ```bash
 conda create -n research python=3.11 -y
 conda run -n research pip install pymupdf pdfplumber pymupdf4llm python-docx mammoth
+
+# 自測（全過印 ALL PASS）
+conda run -n research python .claude/skills/source-document-extraction/tests/test_clean_docx_markdown.py
+conda run -n research python .claude/skills/source-document-extraction/tests/test_extract_pdf.py
 ```
 
-裸 `python`/`pip` 已於 `.claude/settings.json` 封鎖；一律走 `conda run -n research`。
+裸 `python`/`pip` 已於 `.claude/settings.json` 封鎖；一律走 `conda run -n research`。測試細節（含 PDF 後端組需自備 `SDE_TEST_PDF`）見 [`docs/test.md`](docs/test.md)。
 
 **4. markdown-to-word（選用，把 `reports/` 報告匯出成 Word `.docx`）**
 
@@ -125,7 +136,7 @@ conda run -n research python tests/test_mcp_servers.py
 
 ## 設計要點
 
-- **共用規範集中**：反捏造(anti-leakage)、信心分級、假設支持紀律等收在 `.claude/skills/_shared/`，各 skill 引用而非各自重寫。
+- **共用規範集中**：反捏造（anti-leakage）、信心分級、假設支持紀律等收在 `.claude/skills/_shared/`，各 skill 引用而非各自重寫。
 - **路由單一真相源**：所有模式與分流集中在 `MODE_REGISTRY.md`。
 - **可獨立抽離**：不依賴任何母 repo，整個 `Paperdoku/` 目錄可作為獨立專案搬走使用。
 
@@ -138,7 +149,7 @@ Paperdoku/
   MODE_REGISTRY.md     模式 → skill 路由表
   docs/
     install.md         安裝與前置需求（外部相依集中處）
-    test.md            MCP 連線測試的指令與說明
+    test.md            三組測試（MCP 連線／擷取層／skill frontmatter）的指令與說明
   tests/
     test_mcp_servers.py       兩個資料源 MCP 的連線測試（conda run 執行）
     test_skill_frontmatter.py SKILL.md frontmatter YAML 守門測試
@@ -171,14 +182,47 @@ Paperdoku/
 skill 間的交接已文件化於 `.claude/skills/_shared/handoff.md`，兩條 pipeline 以橋接點相接：
 
 ```
-前段：research-brainstorming-zh ─▶ paper-search ─▶ literature-scoping-zh ─▶ scholar-evaluation-zh ─▶ hypothesis-generation-zh
-      （產物皆在 research-design/）                        │
-                          【橋接點】前段挑出的關鍵論文 → papers/ ┘
-                                                          ▼
-後段：paper-search ─清單─▶ source-document-extraction ─extracted/*.md─▶ 閱讀/分析/審查層 ─▶ literature-review-organizer ─reports/*.md─▶（選用）markdown-to-word ─▶ .docx
+前段：研究設計 pipeline（產物皆在 research-design/）
+
+  research-brainstorming-zh    發散：產生並排序候選研究方向
+            │
+            ▼
+  paper-search                 掌握既有文獻（前後段共用）
+            │
+            ▼
+  literature-scoping-zh        系統盤點文獻地圖 → 定研究缺口
+            │
+            ▼
+  scholar-evaluation-zh        檢驗關鍵文獻可信度、加權排序
+            │
+            ▼
+  hypothesis-generation-zh     收斂成可檢驗的假設與檢驗設計
+            │
+            │  【橋接點】前段挑出的關鍵論文 → 使用者放進 papers/
+            ▼
+後段：論文閱讀 pipeline（產物皆在 reports/）
+
+  paper-search                 找候選 → 清單／output/*.bib
+            │
+            ▼
+  source-document-extraction   PDF/Word → extracted/*.md
+            │
+            ▼
+  閱讀/分析/審查層             paper-reading-zh
+            │                  method-extraction-social-science
+            │                  paper-research-logic-review
+            │                  academic-peer-review-zh
+            │                  citation-verification-zh
+            ▼
+  literature-review-organizer  多篇綜整／systematic review → reports/*.md
+            │
+            ▼
+  markdown-to-word（選用）     reports/*.md → .docx（交稿）
 ```
 
-共用 `extracted/`（抽取全文）、`output/`（搜尋產物）、`research-design/`（前段產物）目錄慣例；每個 skill 自述上下游、收尾建議下一步。**這不是自動 orchestrator**——Claude Code 不會自動連跑 skills，由你推進。
+交接靠三件事：共用目錄慣例（`extracted/` 抽取全文、`output/` 搜尋產物、`research-design/` 前段產物）、每個 skill 自述上下游、收尾建議下一步。外部匯入的 `source-document-extraction` 為維持可攜性不含本專案慣例，其接線改寫在 `handoff.md` 的「擷取層接線」節。
+
+**這不是自動 orchestrator**——Claude Code 不會自動連跑 skills，由你推進。
 
 ## 已知限制（本版）
 
@@ -187,9 +231,13 @@ skill 間的交接已文件化於 `.claude/skills/_shared/handoff.md`，兩條 p
 
 ## 📄 授權 / License
 
-本 suite 以 **[CC-BY-NC 4.0](LICENSE)**（創用 CC 姓名標示—非商業性 4.0）釋出 © 2026 Cho-Hsun Lu（billy1125）。你可自由分享與修改，但**須標示來源、且不得作商業使用**。內容依「現狀（AS IS）」提供，不負擔任何擔保責任，詳見上方免責聲明。完整授權條文見 [`LICENSE`](LICENSE)；著作權、署名與第三方聲明見 [`NOTICE`](NOTICE)。
+本 suite 以 **[CC-BY-NC 4.0](LICENSE)**（創用 CC 姓名標示—非商業性 4.0）釋出 © 2026 Cho-Hsun Lu（billy1125）。你可自由分享與修改，但**須標示來源、且不得作商業使用**。內容依「現狀（AS IS）」提供，不負擔任何擔保責任，詳見上方免責聲明。
 
-本 suite 的設計理念參考了 [**Academic Research Skills**](https://github.com/Imbad0202/academic-research-skills)（作者 Cheng-I Wu，亦採 CC-BY-NC 4.0）的精神與思路；依其授權標示來源：`Based on Academic Research Skills by Cheng-I Wu`。下列外部相依皆**不屬於本 repo**、各依原授權，由使用者自行安裝：
+完整授權條文見 [`LICENSE`](LICENSE)；著作權、署名與第三方聲明見 [`NOTICE`](NOTICE)。
+
+設計理念參考了 [**Academic Research Skills**](https://github.com/Imbad0202/academic-research-skills)（作者 Cheng-I Wu，亦採 CC-BY-NC 4.0）的精神與思路，依其授權標示來源：`Based on Academic Research Skills by Cheng-I Wu`。
+
+下列外部相依皆**不屬於本 repo**、各依原授權，由使用者自行安裝：
 
 - `paper-search` 與 `citation-verification-zh` 透過 `.mcp.json` 呼叫的兩個論文資料庫 MCP server——[`akapet00/semantic-scholar-mcp`](https://github.com/akapet00/semantic-scholar-mcp)（經 `uvx`，資料來源 [Semantic Scholar](https://www.semanticscholar.org/)）與 [`openalex-research-mcp`](https://www.npmjs.com/package/openalex-research-mcp)（MIT，經 `npx`，資料來源 [OpenAlex](https://openalex.org/)）。
 - `markdown-to-word` 透過 `pypandoc`（MIT）呼叫的 **Pandoc**（GPL-2.0-or-later，經 conda-forge 安裝）。本 repo 不打包其二進位，故 GPL 不擴散至本 suite。詳見 [`NOTICE`](NOTICE)。

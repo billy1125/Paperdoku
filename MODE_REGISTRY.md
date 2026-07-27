@@ -87,7 +87,9 @@ Paperdoku 分兩條可獨立運作、前後有關聯但不相依的 pipeline。�
 ### source-document-extraction（文件擷取）
 - PDF 後端：`pymupdf4llm`（預設）/ `--legacy`（自製後端）；旁路：`--raw` / `--outline` / `--pages`。
 - **`--figures`**：把選定頁 render 成 PNG（供 VLM 圖表查核，見 `_shared/figure_fidelity.md`）。
-- Word:mammoth（預設）/ `--txt`。
+- Word 後端：mammoth（預設，**含預設清理**：base64 圖片換佔位標記、去書籤錨點與目錄連結、還原安全跳脫）/ `--keep-images`（保留圖片）/ `--no-clean`（不清理）；旁路：`--txt`（python-docx 段落＋表格純文字）。
+- Word 內的 MathType／WMF 公式物件本身是圖片，**轉檔時公式即已遺失**；下游須列為缺漏，不得憑記憶補完（`_shared/anti_leakage.md`）。
+- **外部匯入（vendored）skill**：其文件刻意不含本專案的路徑與 skill 名，故不自述上下游。輸出一律留在預設的 `extracted/`、**不要用 `-o`**；接線見 `_shared/handoff.md`「擷取層接線」節。
 
 ### academic-peer-review-zh（完整同儕審查）
 - 為**單篇**論文產出繁中審查意見書：摘述 → 整體評估 → 逐條 Major/Minor（問題→證據→修改方向） → **總體建議(Accept / Minor Revision / Major Revision / Reject)**。

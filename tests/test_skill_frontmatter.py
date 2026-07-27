@@ -6,6 +6,10 @@ silently breaks YAML parsing, so Claude Code cannot load the skill. This test
 parses each `.claude/skills/*/SKILL.md` frontmatter with yaml.safe_load and
 asserts the required keys are present.
 
+`version` is a Paperdoku suite convention, not an Agent Skills spec requirement,
+so it is optional here: vendored (externally maintained) skills may ship without
+it and are reported as `[no version]` rather than failing.
+
 Run:
     conda run -n research python tests/test_skill_frontmatter.py
 
@@ -20,7 +24,8 @@ import yaml
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SKILLS = os.path.join(ROOT, ".claude", "skills")
-REQUIRED = ("name", "description", "version")
+REQUIRED = ("name", "description")
+OPTIONAL = ("version",)
 
 
 def log(msg):
@@ -70,7 +75,10 @@ def main():
         if missing:
             failures.append((name, "missing keys: %s" % ", ".join(missing)))
             continue
-        log("[PASS] %s  (%s)" % (name, ", ".join("%s" % k for k in REQUIRED)))
+        present = [k for k in REQUIRED + OPTIONAL if k in data]
+        absent = [k for k in OPTIONAL if k not in data]
+        note = "  [no %s]" % ", ".join(absent) if absent else ""
+        log("[PASS] %s  (%s)%s" % (name, ", ".join(present), note))
 
     log("-" * 60)
     if failures:

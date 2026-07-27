@@ -6,8 +6,8 @@
 
 模型要能**看到圖**才能查。圖不在脈絡中時：
 
-1. 用 `source-document-extraction` 的 `--figures` 把含圖的頁 render 成 PNG:
-   `conda run -n research python scripts/extract_pdf.py paper.pdf --figures --pages 5-6`
+1. 用 `source-document-extraction` 的 `--figures` 把含圖的頁 render 成 PNG（自 repo 根目錄執行，路徑須寫全——該 skill 為外部匯入、其文件用的是技能目錄內的相對路徑）:
+   `conda run -n research python .claude/skills/source-document-extraction/scripts/extract_pdf.py papers/paper.pdf --figures --pages 5-6`
    → 產出 `extracted/figures/paper-p5.png` 等。
 2. 用 Read 工具直接讀該 PNG（Claude 本身是多模態，可看圖；不需外接 VLM API）。
 3. 同時取 caption 與內文對該圖的宣稱（來自 extracted 的 `.md`）。

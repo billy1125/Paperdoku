@@ -93,7 +93,7 @@ OpenAlex 基本查詢**免金鑰、完全開放**。兩個環境變數放進 **`
 
 ## 3. source-document-extraction（PDF/Word 擷取）
 
-需 conda 環境 `research`（Python 3.11，跨平台）與擷取套件：
+把 `papers/` 的來源檔轉成 `extracted/*.md` 供閱讀。PDF 走 pymupdf4llm（可 `--legacy` 換自製後端），Word 走 mammoth **並預設清理** Word 內部構造（base64 圖片、書籤錨點、反斜線跳脫；`--keep-images`／`--no-clean` 可調）。需 conda 環境 `research`（Python 3.11，跨平台）與擷取套件：
 
 ```bash
 conda create -n research python=3.11 -y
@@ -106,13 +106,24 @@ conda run -n research pip install pymupdf pdfplumber pymupdf4llm python-docx mam
 conda run -n research python -c "import fitz, pdfplumber, pymupdf4llm"
 ```
 
-以實際 PDF fixture 自測（不依賴 pytest；全過印 `ALL PASS`、以 0 退出；fixture 見該 skill）：
+自測（兩支皆不依賴 pytest，全過印 `ALL PASS`、以 0 退出）：
 
 ```bash
+conda run -n research python .claude/skills/source-document-extraction/tests/test_clean_docx_markdown.py
 conda run -n research python .claude/skills/source-document-extraction/tests/test_extract_pdf.py
 ```
 
+Word 那支以合成字串驗證，不需任何檔案。PDF 那支分兩組：`--figures` 自製臨時 PDF、一律執行；兩後端與各模式那組需**自備一份含標題與表格的 PDF**（本技能不隨附測試檔，第三方文件不進版控），未提供時該組略過並印提示。要跑就用 `SDE_TEST_PDF` 指定：
+
+```bash
+SDE_TEST_PDF="path/to/paper.pdf" conda run -n research python .claude/skills/source-document-extraction/tests/test_extract_pdf.py
+```
+
+測試內容與預期輸出見 [`test.md`](test.md)。
+
 裸 `python`/`pip` 已於 `.claude/settings.json` 封鎖；一律走 `conda run -n research`。詳細選項見該 skill 的 [`SKILL.md`](../.claude/skills/source-document-extraction/SKILL.md) 與 [`CLAUDE.md`](../.claude/skills/source-document-extraction/CLAUDE.md)。
+
+本 skill 為**外部匯入（vendored）**：它遵循 Agent Skills 開放規格、刻意不綁定任何 repo，上述兩份文件只描述通用行為，不含 Paperdoku 的目錄慣例與接線（也因此其 frontmatter 不帶 `version`，屬正常）。本專案的接線——上下游、產物一律落在預設的 `extracted/`、**不要用 `-o`**——寫在 [`_shared/handoff.md`](../.claude/skills/_shared/handoff.md) 的「擷取層接線」節。更新方式為整包覆蓋上游版本，**不要在該目錄內加回本專案的路徑或 skill 名**，下次覆蓋會遺失。
 
 ## 4. 驗證兩個資料源 MCP
 
