@@ -3,6 +3,10 @@
 **預設輸出 Markdown（.md）**：以 mammoth 轉出、保留標題層級，供後續 Read 閱讀。
 需純文字（段落＋表格、以 python-docx 抽取）時用 `--txt`。
 
+Markdown 路徑**預設經 clean_docx_markdown 清理**（`--no-clean` 關閉）：把內嵌
+base64 圖片換成佔位標記、移除 Word 書籤錨點與目錄內部連結、還原安全標點的反斜線
+跳脫。清理只動標記不動文字。`--txt` 路徑不涉及 mammoth 標記，不做清理。
+
 輸出路徑：省略 `-o` 時，由輸入檔名主幹加副檔名，落在環境變數 `SDE_OUT_DIR`
 指定的資料夾（預設 `extracted`）；`-o` 顯式指定時以其為準。
 
@@ -18,10 +22,17 @@
 
     # 以 python-docx 抽取段落＋表格純文字（除錯或需保留表格原貌時）
     conda run -n research python scripts/extract_docx.py draft.docx --txt
+
+    # 保留內嵌 base64 圖片 / 完全不清理
+    conda run -n research python scripts/extract_docx.py draft.docx --keep-images
+    conda run -n research python scripts/extract_docx.py draft.docx --no-clean
 """
 import argparse
 import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from clean_docx_markdown import clean_docx_markdown  # noqa: E402
 
 
 def extract_with_python_docx(path: str) -> str:
@@ -67,12 +78,21 @@ def main() -> None:
     ap.add_argument("docx", help=".docx 路徑，例如 draft.docx")
     ap.add_argument("--txt", action="store_true",
                     help="改用 python-docx 抽段落＋表格純文字（預設用 mammoth 轉 Markdown）")
+    ap.add_argument("--no-clean", action="store_true",
+                    help="不做預設清理（保留 base64 圖片、書籤錨點與反斜線跳脫）")
+    ap.add_argument("--keep-images", action="store_true",
+                    help="保留內嵌 base64 圖片（預設換成佔位標記）")
     ap.add_argument("-o", "--out",
                     help="輸出檔路徑（UTF-8）；省略則用 SDE_OUT_DIR（預設 extracted）")
     args = ap.parse_args()
 
-    text = (extract_with_python_docx(args.docx) if args.txt
-            else extract_with_mammoth(args.docx))
+    note = None
+    if args.txt:
+        text = extract_with_python_docx(args.docx)
+    else:
+        text = extract_with_mammoth(args.docx)
+        if not args.no_clean:
+            text, note = clean_docx_markdown(text, keep_images=args.keep_images)
 
     out = args.out if args.out else default_out(args.docx, ".txt" if args.txt else ".md")
     out_dir = os.path.dirname(out)
@@ -81,6 +101,8 @@ def main() -> None:
     with open(out, "w", encoding="utf-8") as f:
         f.write(text)
 
+    if note:
+        print(note, file=sys.stderr)
     safe = out.encode("ascii", "replace").decode("ascii")
     print(f"done -> {safe}", file=sys.stderr)
 
